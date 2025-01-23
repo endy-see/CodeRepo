@@ -47,9 +47,11 @@ class PreprocessingDatasetTemplate(Dataset):
         print('Count the data number of memmap')
 
         def wccount(file_path):
-            out = \
-            subprocess.Popen(['wc', '-l', file_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate()[0]
-            return int(out.partition(b' ')[0])
+            # out = \
+            # subprocess.Popen(['wc', '-l', file_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate()[0]
+            # return int(out.partition(b' ')[0])
+            out = subprocess.check_output(['wc', '-l', file_path])
+            return int(out.decode().split()[0])
 
         shape = (wccount(data_path),)
 
@@ -61,7 +63,8 @@ class PreprocessingDatasetTemplate(Dataset):
             if len(html_text) < 1:
                 html_text = '\ufeff'
             raw_label = 1 if float(label) > 0 else 0
-            assert url is not None and label is not None and html_text is not None, "Url, Label, HtmlText should not be None!"
+            assert url is not None and label is not None and html_text is not None, \
+                "Url, Label, HtmlText should not be None!"
             url_token = torch.tensor(
                 [self.tokenizer.cls_token_id] + self.tokenizer.encode(url, add_special_tokens=False, max_length=511,
                                                                       padding="max_length", truncation=True))

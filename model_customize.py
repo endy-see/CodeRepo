@@ -331,15 +331,16 @@ class StudentModelV2(nn.Module):
         """
         module:
         BertEmbeddings(
-            (word_embeddings): None, for BertModel: Embedding(119547, 768, padding_idx=0)
-            (position_embeddings): PositionalEncoding(), for BertModel, it's Embedding(512, 768)
-            (token_type_embeddings): Embedding(2, 768)
-            (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+            (word_embeddings): None, for BertModel: Embedding(119547, 128, padding_idx=0)
+            (position_embeddings): PositionalEncoding(), for BertModel, it's Embedding(512, 128)
+            (token_type_embeddings): Embedding(2, 128)
+            (LayerNorm): LayerNorm((128,), eps=1e-12, elementwise_affine=True)
             (dropout): Dropout(p=0.1, inplace=False)
         )
         """
         # print(f'module type:{type(module)}')
         """
+        module type:<class 'torch.nn.modules.sparse.Embedding'>
         module type:<class 'torch.nn.modules.sparse.Embedding'>
         module type:<class 'torch.nn.modules.sparse.Embedding'>
         module type:<class 'torch.nn.modules.normalization.LayerNorm'>
@@ -349,25 +350,25 @@ class StudentModelV2(nn.Module):
 
         # encoder start
         # attention start
-        module type:<class 'torch.nn.modules.linear.Linear'>    query: (768, 768)
-        module type:<class 'torch.nn.modules.linear.Linear'>    key: (768, 768)
-        module type:<class 'torch.nn.modules.linear.Linear'>    value: (768, 768)
+        module type:<class 'torch.nn.modules.linear.Linear'>    query: (128, 128)
+        module type:<class 'torch.nn.modules.linear.Linear'>    key: (128, 128)
+        module type:<class 'torch.nn.modules.linear.Linear'>    value: (128, 128)
         module type:<class 'torch.nn.modules.dropout.Dropout'>
         module type:<class 'transformers.models.bert.modeling_bert.BertSdpaSelfAttention'>
 
-        module type:<class 'torch.nn.modules.linear.Linear'>    dense: (768, 768)
-        module type:<class 'torch.nn.modules.normalization.LayerNorm'>  (768,)
+        module type:<class 'torch.nn.modules.linear.Linear'>    dense: (128, 128)
+        module type:<class 'torch.nn.modules.normalization.LayerNorm'>  (128,)
         module type:<class 'torch.nn.modules.dropout.Dropout'>
         module type:<class 'transformers.models.bert.modeling_bert.BertSelfOutput'>
         module type:<class 'transformers.models.bert.modeling_bert.BertAttention'>
         # attention end
 
-        module type:<class 'torch.nn.modules.linear.Linear'>            (in_features=768, out_features=3072)
+        module type:<class 'torch.nn.modules.linear.Linear'>            (in_features=128, out_features=512)
         module type:<class 'transformers.activations.GELUActivation'>
         module type:<class 'transformers.models.bert.modeling_bert.BertIntermediate'>
 
-        module type:<class 'torch.nn.modules.linear.Linear'>            (in_features=3072, out_features=768)
-        module type:<class 'torch.nn.modules.normalization.LayerNorm'>  (768,)
+        module type:<class 'torch.nn.modules.linear.Linear'>            (in_features=512, out_features=128)
+        module type:<class 'torch.nn.modules.normalization.LayerNorm'>  (128,)
         module type:<class 'torch.nn.modules.dropout.Dropout'>          (p=0.1)
         module type:<class 'transformers.models.bert.modeling_bert.BertOutput'>
 
@@ -377,13 +378,14 @@ class StudentModelV2(nn.Module):
         # encoder end
 
         # pooler start
-        module type:<class 'torch.nn.modules.linear.Linear'>     (in_features=768, out_features=768, bias=True)
+        module type:<class 'torch.nn.modules.linear.Linear'>     (in_features=128, out_features=128, bias=True)
         module type:<class 'torch.nn.modules.activation.Tanh'>
         module type:<class 'transformers.models.bert.modeling_bert.BertPooler'>
         # pooler end
 
         module type:<class 'transformers.models.bert.modeling_bert.BertModel'>
         """
+        print(type(module))
         if isinstance(module, nn.Linear):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
             if module.bias is not None:
@@ -396,7 +398,7 @@ class StudentModelV2(nn.Module):
                 torch.nn.init.zeros_(module.bias)
 
     def forward(self, url_tokens, text_tokens):
-        # get url embedding, url_emb: [2, 768], self.url_enc()['last_hidden_state'].shape: [2, 512, 128]
+        # get url embedding, url_emb: [2, 128], self.url_enc()['last_hidden_state'].shape: [2, 512, 128]
         url_emb = self.url_enc(input_ids=url_tokens, attention_mask=url_tokens != 0)['pooler_output']
         # get text embedding, text_tokens: [2,4,512], text_emb: [2,4,128]
         text_emb = torch.stack([self.text_enc( # for each i, the output of self.text_enc(..)['pooler_output'] is [2,128]
@@ -559,7 +561,19 @@ def test_teacher_model():
 
 
 def test_student_model():
-    pass
+    # batch_size, seq_length
+    url_tokens_shape = (2, 512,)
+    text_tokens_shape = (2, 4, 512)
+
+    url_tokens = torch.randint(0, 1000, url_tokens_shape)
+    text_tokens = torch.randint(0, 1000, text_tokens_shape)
+    model = StudentModelV2(try_model_names['tiny_bert'], url_layer_num=1, text_layer_num=1, combine_layer_num=1)
+    output, output_256d = model(url_tokens, text_tokens)  # out_emb: [2,5], out_256d: [2, 256]
+    optimizer = model.configure_optimizers(weight_decay=1e-1, learning_rate=2e-5, betas=(0.9, 0.95))
+    assert output.shape == (2, 5) and output_256d.shape == (2, 256) and optimizer is not None, \
+        "Output shape is incorrect!"
+    print('Student model test is completed!')
+
 
 
 if __name__ == '__main__':
@@ -567,4 +581,7 @@ if __name__ == '__main__':
     # test_positional_enoding()
 
     # Test teacher model
-    test_teacher_model()
+    # test_teacher_model()
+
+    # Test student model
+    test_student_model()
