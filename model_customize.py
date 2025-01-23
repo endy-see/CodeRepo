@@ -11,13 +11,10 @@ import torch.nn.functional as F
 from transformers import BertModel, BertTokenizer, AutoModel, AutoConfig, AutoTokenizer
 from torch.distributed import init_process_group
 import torch.nn.init as init
+from config import try_model_names
 
 EMBEDDING_DIM = 768
 NUM_SEQ, MIN_SEQ_LENGTH = 4, 512
-try_model_names = {
-    'tiny_bert': 'prajjwal1/bert-tiny',
-    'multilingual_bert': 'bert-base-multilingual-cased'     # 12 layers
-}
 
 
 class PositionalEncoding(nn.Module):

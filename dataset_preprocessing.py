@@ -58,15 +58,22 @@ class PreprocessingDatasetTemplate(Dataset):
         for idx, sample in enumerate(open(data_path, 'rb')):
             sample = sample.decode('utf-8').strip().split('\t')
             url, html_text, label, index = sample
+            if len(html_text) < 1:
+                html_text = '\ufeff'
             raw_label = 1 if float(label) > 0 else 0
             assert url is not None and label is not None and html_text is not None, "Url, Label, HtmlText should not be None!"
             url_token = torch.tensor(
                 [self.tokenizer.cls_token_id] + self.tokenizer.encode(url, add_special_tokens=False, max_length=511,
                                                                       padding="max_length", truncation=True))
-            full_text_token = torch.tensor(
-                [self.tokenizer.cls_token_id] + self.tokenizer.encode(html_text, add_special_tokens=True,
-                                                                      max_length=2047, padding="max_length",
-                                                                      truncation=True))
+            if html_text.startswith('\ufeff'):
+                full_text_token = torch.tensor(self.tokenizer.encode(html_text, add_special_tokens=True,
+                                                                     max_length=2048, padding="max_length",
+                                                                     truncation=True))
+            else:
+                full_text_token = torch.tensor(
+                    [self.tokenizer.cls_token_id] + self.tokenizer.encode(html_text, add_special_tokens=True,
+                                                                          max_length=2047, padding="max_length",
+                                                                          truncation=True))
             label = self._generate_label(raw_label)
 
             text_token = full_text_token.reshape(NUM_SEQ, MIN_SEQ_LENGTH)
@@ -94,7 +101,12 @@ class PreprocessingDatasetTemplate(Dataset):
         return len(self.memmap_file)
 
 
-if __name__ == '__main__':
+"""
+****************************************************** Unit tests ******************************************************
+"""
+
+
+def test_preprocessing_dataset_template():
     tokenizer = BertTokenizer.from_pretrained('prajjwal1/bert-tiny')
     dataset = PreprocessingDatasetTemplate('./tmp_file_for_local_test.tsv', tokenizer)
     for index in range(len(dataset)):
@@ -103,3 +115,8 @@ if __name__ == '__main__':
         print(f'text_token: {text_token}')
         print(f'label: {label}')
         print(f'index: {index}')
+
+
+if __name__ == '__main__':
+    # Test PreprocessingDatasetTemplate
+    test_preprocessing_dataset_template()

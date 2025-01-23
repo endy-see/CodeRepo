@@ -12,3 +12,6 @@ pip install accelerate
 pip install datasets peft bitsandbytes wandb tensorboard
 pip install scikit-learn panda
 pip install notebook
+
+# File description
+model_dist_training.py: distribute training small models, like tinyBERT, modernBERT, Deberta, etc.
