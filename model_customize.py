@@ -76,6 +76,8 @@ class TeacherModelV2(nn.Module):
         self.average_embeddings = True
 
         # keep only the first n encoder layer for url_enc/text_enc/combine_enc
+        # here not initialize the embedding layer of the encoder, but instead used the params from the pretrained model.
+        # Note: for student model, the embedding layer will be initialized since it needs to derive params from teacher.
         self.url_enc = BertModel.from_pretrained(model_name)
         self.url_enc.encoder.layer = self.url_enc.encoder.layer[:url_layer_num]
 
@@ -197,6 +199,96 @@ class TeacherModelV2(nn.Module):
         # out_emb: [2,5], out_256d: [2, 256]
         return out_emb, out_256d
 
+    def configure_optimizers(self, weight_decay, learning_rate, betas):
+        """
+        this function is unfortunately doing something very simple and is being very defensive:
+        we are separating out all parameters of the model into two buckets:
+        those that will experience weight decay for regularization and those that won't
+        (biases, and layernorm/embedding weights). Then return the AdamW optimizer in PyTorch with custom weight decay
+        settings for different groups of model parameters.
+        This is a common practice in deep learning to apply weight decay selectively, as not all parameters benefit
+        from regularization in the same way.
+        Usage scenarios:
+        1) Selective Weight Decay
+            a) Some parameters, such as those in normalization layers (LayerNorm,BatchNorm) or embedding layers,
+            should not be regularized because they are not part of the feature learning process
+            b) Other parameters, such as weights in Linear or Conv layers, benefit from weight decay
+            to prevent overfitting
+        2) Fine-Tuning Pretrained Models,
+            when fine-tuning pretrained models, you may want to apply weight decay only to certain layers
+            (e.g. the newly added layers - combine_enc) while excluding others (e.g. pretrained embeddings).
+        2) Custom Optimization Strategies
+            If your model has specific layers or components that require different optimization strategies,
+            this approach allows you to customize the optimizer behavior for each group of parameters.
+        3)Improving Model Generalization
+            By applying weight decay selectively, you can improve the model's generalization performance
+            without negatively affecting parameters that should not be regularized
+        """
+        decay = set()
+        no_decay = set()
+
+        whitelist_weight_modules = (torch.nn.Linear,                # Fully connected layers
+                                    torch.nn.Conv1d,                # 1D convolutional layers
+                                    torch.nn.Conv2d,
+                                    torch.nn.Conv3d,
+                                    torch.nn.ConvTranspose1d,       # 1D transposed convolutional layers
+                                    torch.nn.ConvTranspose2d,
+                                    torch.nn.ConvTranspose3d,
+                                    torch.nn.MultiheadAttention)    # Attention layers (query, key, value weights)
+        blacklist_weight_modules = (torch.nn.LayerNorm,      # Layer normalization
+                                    torch.nn.BatchNorm1d,    # 1D batch normalization
+                                    torch.nn.BatchNorm2d,
+                                    torch.nn.BatchNorm3d,
+                                    torch.nn.GroupNorm,      # Group normalization
+                                    torch.nn.InstanceNorm1d, # 1D instance normalization
+                                    torch.nn.InstanceNorm2d,
+                                    torch.nn.InstanceNorm3d,
+                                    torch.nn.Embedding,      # Embedding layers
+                                    torch.nn.EmbeddingBag,   # Embedding layers
+                                    torch.nn.PReLU,          # Parametric ReLU (learnable parameter)
+                                    torch.nn.LSTM,           # LSTM layers (biases and hidden weights)
+                                    torch.nn.GRU,            # GRU layers (biases and hidden weights)
+                                    torch.nn.RNN,)           # RNN layers (biases and hidden weights)
+
+        # module_name and module are recursive layer by layer, for example:
+        # module_name: url_enc, module: BertModel
+        # module_name: url_enc.embeddings, module: BertEmbeddings
+        # module_name: url_enc.embeddings.word_embeddings, module: Embedding
+        for module_name, module in self.named_modules():
+            # param_name: {weight, bias}
+            for param_name, param in module.named_parameters(): # pn: param_name, p: param
+                fpn = '%s.%s' % (module_name, param_name) if module_name else param_name  # full param name
+                # skip frozen parameters
+                if not param.requires_grad:
+                    continue
+                # random note: because named_modules and named_parameters are recursive, we will see the same tensors p
+                # many many times, but doing it this way allows us to know which parent module any tnesor p belongs to..
+                if param_name.endswith('bias'):
+                    # all biases will not be decayed
+                    no_decay.add(fpn)
+                    continue
+                if param_name.endswith('weight') and isinstance(module, whitelist_weight_modules):
+                    # weights of whitelist modules will be weight decayed
+                    decay.add(fpn)
+                elif param_name.endswith('weight') and isinstance(module, blacklist_weight_modules):
+                    # weights of blacklist modules will NOT be weight decayed
+                    no_decay.add(fpn)
+                # else:
+                #     raise ValueError(f'the error module type is: {type(module)}')
+        # validate that we considered every parameter
+        param_dict = {param_name: param for param_name, param in self.named_parameters()}
+        inter_params = decay & no_decay
+        union_params = decay | no_decay
+        assert len(inter_params) == 0, "parameters %s made it into both decay/no_decay sets!" % (str(inter_params),)
+        assert len(param_dict.keys() - union_params) == 0, \
+            f"parameters {str(param_dict.keys() - union_params)} were not separated into either decay/no_decay set!"
+        # create the pytorch optimizer object
+        optim_groups = [
+            {"params": [param_dict[pn] for pn in sorted(list(decay))], "weight_decay": weight_decay},
+            {"params": [param_dict[pn] for pn in sorted(list(no_decay))], "weight_decay": 0.0},
+        ]
+        optimizer = torch.optim.AdamW(optim_groups, lr=learning_rate, betas=betas)
+        return optimizer
 
 """
 ****************************************************** Unit tests ******************************************************
@@ -231,8 +323,14 @@ def test_teacher_model():
     text_tokens = torch.randint(0, 1000, text_tokens_shape)
     model = TeacherModelV2(try_model_names['multilingual_bert'], url_layer_num=1, text_layer_num=1, combine_layer_num=1)
     output, output_256d = model(url_tokens, text_tokens) # out_emb: [2,5], out_256d: [2, 256]
-    assert output.shape == (2, 5) and output_256d.shape == (2, 256), "Output shape is incorrect!"
+    optimizer = model.configure_optimizers(weight_decay=1e-1, learning_rate=2e-5, betas=(0.9, 0.95))
+    assert output.shape == (2, 5) and output_256d.shape == (2, 256) and optimizer is not None, \
+        "Output shape is incorrect!"
     print('Teacher model test is completed!')
+
+
+def test_student_model():
+    pass
 
 
 if __name__ == '__main__':
