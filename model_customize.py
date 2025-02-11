@@ -295,7 +295,7 @@ class StudentModelV2(nn.Module):
     """
     Student model
     """
-    def __init__(self, model_name="prajjwal1/bert-tiny", url_layer_num=1, text_layer_num=1, combine_layer_num=1):
+    def __init__(self, model_name="prajjwal1/bert-tiny", url_layer_num=1, text_layer_num=2, combine_layer_num=1):
         super(StudentModelV2, self).__init__()
         self.average_embeddings = True
 
@@ -323,7 +323,7 @@ class StudentModelV2(nn.Module):
         self.fc = nn.Sequential(
             nn.Linear(128, 256),  # (128,256)
             nn.ReLU(),
-            nn.Linear(256, 5)  # 5 means 5 positive categories
+            nn.Linear(256, 5)  # 5 means 5 positive categories, if only 1 positive category, just set it to 1
         )
         self.fc.apply(self._init_weights)
 
@@ -567,7 +567,7 @@ def test_student_model():
 
     url_tokens = torch.randint(0, 1000, url_tokens_shape)
     text_tokens = torch.randint(0, 1000, text_tokens_shape)
-    model = StudentModelV2(try_model_names['tiny_bert'], url_layer_num=1, text_layer_num=1, combine_layer_num=1)
+    model = StudentModelV2(try_model_names['tiny_bert'], url_layer_num=1, text_layer_num=2, combine_layer_num=1)
     output, output_256d = model(url_tokens, text_tokens)  # out_emb: [2,5], out_256d: [2, 256]
     optimizer = model.configure_optimizers(weight_decay=1e-1, learning_rate=2e-5, betas=(0.9, 0.95))
     assert output.shape == (2, 5) and output_256d.shape == (2, 256) and optimizer is not None, \
