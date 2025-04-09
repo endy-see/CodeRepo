@@ -1,0 +1,61 @@
+# Model arguments 模型参数配置
+# For definitions, see: src/h4/training/config.py
+model_name_or_path: deepseek-ai/deepseek-math-7b-base   # 指定要使用的预训练模型的名称或本地路径
+# 这里表示从 Hugging Face 模型库中加载 deepseek-ai 组织下的 deepseek-math-7b-base 模型；若为本地路径，则加载本地存储的模型
+model_revision: main    # 指定模型的版本或分支。设置为 main 表示使用模型的主分支版本
+torch_dtype: bfloat16   # 指定模型使用的 PyTorch 数据类型。设置为 bfloat16 即使用 bfloat16 数据类型进行训练，这种数据类型在保持一定精度的同时能减少内存占用，提高训练速度
+attn_implementation: flash_attention_2  # 指定注意力机制的实现方式。设置为 flash_attention_2 表示使用 FlashAttention 2 算法来实现注意力机制，该算法可以显著提高注意力计算的效率
+overwrite_hub_revision: true  # 控制是否覆盖 Hugging Face 模型库中的版本。设置为 true 表示在将模型推送到 Hugging Face 模型库时，如果存在同名的版本，会进行覆盖
+
+# Data training arguments 数据训练参数配置
+# For definitions, see: src/h4/training/config.py
+block_size: 2048    # 指定输入数据块的大小。设置为 2048 表示每个输入序列的最大长度为 2048 个 token，模型将按此长度对输入数据进行处理
+chat_template: "{% for message in messages %}{% if (message['role'] == 'system')%}{{ '' }}{% elif (message['role'] == 'user')%}{{ '### Problem: ' + message['content'] + '\n' }}{% elif (message['role'] == 'assistant')%}{{ '### Solution: ' + message['content'] + '\n' }}{% endif %}{% if loop.last and message['role'] == 'user' and add_generation_prompt %}{{ '### Solution: ' }}{% endif %}{% endfor %}"
+# 这是一个模板字符串，用于格式化聊天数据。根据消息的角色（system、user、assistant）对消息内容进行不同的格式化，例如用户消息前添加 ### Problem: ，助手消息前添加 ### Solution:
+dataset_mixer:      # 指定数据集的混合比例。这里使用 AI-MO/NuminaMath-CoT 数据集，比例为 1.0，表示只使用这一个数据集进行训练
+  AI-MO/NuminaMath-CoT: 1.0
+dataset_splits:     # 指定要使用的数据集划分。设置为 ['train', 'test'] 表示使用训练集和测试集进行训练和评估
+- train
+- test
+preprocessing_num_workers: 12   # 指定数据预处理时使用的并行工作线程数。设置为 12 表示使用 12 个线程并行进行数据预处理，可提高数据处理速度
+
+# Training arguments with sensible defaults  训练参数配置
+# Add other options from here: https://huggingface.co/docs/transformers/v4.26.1/en/main_classes/trainer#transformers.TrainingArguments
+bf16: true          # 启用 bfloat16 混合精度训练
+do_eval: true       # 控制是否进行评估。true表示在训练过程中会进行评估
+do_train: true      # 控制是否进行训练。设置为true表示进行模型训练
+eval_strategy: epoch # One of ["no", "steps", "epoch"] 指定评估策略，epoch：在每个训练周期结束后进行评估，no：不进行评估，steps：每经过一定步数进行评估
+gradient_accumulation_steps: 1  # 指定梯度累积的步数。设置为 1 表示不进行梯度累积，即每个批次的梯度都立即用于更新模型参数
+gradient_checkpointing: true    # 控制是否启用梯度检查点技术。设置为 true 表示启用该技术，通过减少中间计算结果的存储来降低内存占用，但会增加计算时间
+gradient_checkpointing_kwargs:  # 梯度检查点技术的额外参数
+  use_reentrant: False          # 不使用可重入的梯度检查点实现
+hub_model_id: numina-math-7b-cot  # 指定要推送到 Hugging Face 模型库的模型名称
+hub_private_repo: true          # 控制是否将模型推送到私有仓库
+hub_strategy: every_save        # 指定推送到 Hugging Face 模型库的策略。设置为 every_save 表示每次保存模型时都将其推送到模型库
+learning_rate: 2.0e-05    # 指定训练的学习率。设置为 2.0e-05 即 0.00002，学习率控制着模型参数更新的步长
+log_level: passive        # 指定日志级别。设置为 passive 表示只输出必要的日志信息
+logging_steps: 5          # 指定日志记录的步数间隔。设置为 5 表示每训练 5 步记录一次日志
+logging_strategy: steps   # 指定日志记录的策略。设置为 steps 表示按步数记录日志
+lr_scheduler_type: cosine # 指定学习率调度器的类型。设置为 cosine 表示使用余弦退火调度器，该调度器会根据训练步数动态调整学习率
+max_steps: -1         # 指定最大训练步数。设置为 -1 表示不限制训练步数，由 num_train_epochs 控制训练周期
+num_train_epochs: 3   # 指定训练的周期数。设置为 3 表示对整个数据集进行 3 个周期的训练
+output_dir: data/numina-math-7b-cot   # 指定训练结果的输出目录。设置为 data/numina-math-7b-cot 表示将训练过程中的模型、日志等文件保存到该目录下
+hub_model_revision: main      # 指定推送到 Hugging Face 模型库的模型版本。设置为 main 表示使用主分支版本
+run_name: numina-math-7b-cot  # 指定训练运行的名称。设置为 numina-math-7b-cot 用于标识本次训练运行
+overwrite_output_dir: true    # 控制是否覆盖输出目录。设置为 true 表示如果输出目录已存在，会覆盖其中的文件
+per_device_eval_batch_size: 8 # 指定每个设备在评估时的批次大小。设置为 8 表示每个设备每次处理 8 个样本进行评估
+per_device_train_batch_size: 4  # 指定每个设备在训练时的批次大小。设置为 4 表示每个设备每次处理 4 个样本进行训练
+push_to_hub: true             # 控制是否将训练好的模型推送到 Hugging Face 模型库。设置为 true 表示推送
+remove_unused_columns: true   # 控制是否移除数据集中未使用的列。设置为 true 表示移除，可减少内存占用
+report_to:                    # 指定训练日志的报告目标。设置为 ['tensorboard', 'wandb'] 表示将训练日志同时报告给 TensorBoard 和 Weights & Biases（W&B），方便可视化训练过程
+- tensorboard
+- wandb
+save_strategy: "no"           # 指定模型保存的策略。设置为 no 表示不自动保存模型，可通过其他方式手动保存
+seed: 42    # 指定随机数种子。设置为 42 用于保证训练的可重复性，相同的种子会使训练过程中的随机操作结果一致
+wandb_run_group: numina-math-7b-cot # Name of the W&B group to collect all runs of this experiment under. Use double-digits for {idx}, starting from 00.
+# wandb_run_group： 指定 Weights & Biases 中的运行组名称。设置为 numina-math-7b-cot 用于将本次训练运行归类到该组中
+wandb_run_id: null # Set this to a globally unique string if you want a descriptive name of your run
+# wandb_run_id：指定 Weights & Biases 中的运行 ID。设置为 null 表示自动生成一个唯一的 ID
+wandb_tags: # Use tags to filter runs on WandB
+- sft       # 指定 Weights & Biases 中的标签。设置为 ['sft'] 用于为本次训练运行添加标签，方便在 W&B 中筛选和分类运行
+warmup_ratio: 0.    # 指定学习率热身的比例。设置为 0.0 表示不进行学习率热身，即训练开始时直接使用指定的学习率

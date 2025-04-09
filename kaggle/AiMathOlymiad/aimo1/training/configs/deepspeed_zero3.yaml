@@ -1,0 +1,26 @@
+compute_environment: LOCAL_MACHINE        # 指定环境的类型。LOCAL_MACHINE表示训练将在本地机器上进行，而不是在分布式集群、云端等其他环境
+debug: false                              # 用于开启或关闭调试模式。设置为 false 表示不开启调试模式，若设置为 true，可能会输出更多详细的调试信息，有助于排查问题
+deepspeed_config:                         # 这是一个嵌套的配置字典，用于配置DeepSpeed库的相关参数。DeepSpeed是一个用于优化深度学习训练的库，支持分布式训练、模型并行等功能
+  deepspeed_multinode_launcher: standard  # 指定多节点启动器的类型，standard表示使用DeepSpeed标准的多节点启动器来协调多个节点上的训练进程
+  offload_optimizer_device: none          # 指定优化器状态卸载的设备。设置为none表示不将优化器状态卸载到其他设备（如CPU），优化器状态将全部存储在GPU上
+  offload_param_device: none              # 指定模型参数卸载的设备。设置为none表示不将模型参数卸载到其他设备，所有模型参数都存储在 GPU 上
+  zero3_init_flag: true                   # 布尔值，开启或关闭ZeRO-3初始化标志。设置为true表示使用ZeRO-3策略在初始化模型时就进行优化，
+  #ZeRO-3是一种用于减少内存占用的优化策略，通过将模型参数、梯度和优化器状态在多个进程间进行分割存储
+  zero3_save_16bit_model: true            # 控制是否以 16位精度保存模型。设置为 true 表示在保存模型时使用 16位精度，这样可以减少模型保存的存储空间
+  zero_stage: 3                           # 指定ZeRO优化策略的阶段。设置为3表示使用ZeRO-3策略，该策略可以显著减少每个GPU上的内存占用，允许训练更大模型
+# 分布式训练相关配置
+distributed_type: DEEPSPEED   # 指定分布式训练的类型。设置为 DEEPSPEED 表示使用 DeepSpeed 库来实现分布式训练
+downcast_bf16: 'no'           # 控制是否将数据类型下转为 bfloat16。设置为 'no' 表示不进行下转，即不将数据类型转换为 bfloat16
+machine_rank: 0               # 指定当前机器再分布式训练集群中的排名。设置为0表示当前机器是主节点，在分布式训练中，主节点通常负责协调和管理其它节点
+main_training_function: main  # 指定主训练函数的名称。这里设置为 main，表示在训练脚本中存在一个名为 main 的函数，该函数将作为训练的入口
+mixed_precision: bf16         # 指定混合精度训练的类型。设置为 bf16 表示使用 bfloat16 数据类型进行混合精度训练，混合精度训练可以在不显著损失模型精度的情况下，减少内存占用和加速训练过程
+num_machines: 1               # 指定分布式训练集群中机器的数量。设置为 1 表示只使用一台机器进行训练，即单机训练
+num_processes: 8              # 指定在每台机器上运行的训练进程数量。设置为 8 表示在当前机器上会启动 8 个训练进程，这些进程可以并行地进行训练，从而提高训练效率
+rdzv_backend: static          # 指定分布式训练中节点发现和同步的后端类型。设置为static表示使用静态的节点发现和同步机制，即节点的信息在训练开始前就已经确定
+same_network: true            # 指示所有参与训练的节点是否在同一个网络中。设置为 true 表示所有节点在同一个网络中，这样可以使用更高效的通信方式
+# TPU相关配置
+tpu_env: []             # 一个列表，用于指定 TPU（张量处理单元）的环境变量。这里设置为空列表 [] 表示不使用 TPU 或者不设置额外的 TPU 环境变量
+tpu_use_cluster: false  # 控制是否使用 TPU 集群进行训练。设置为 false 表示不使用 TPU 集群
+tpu_use_sudo: false     # 控制是否使用 sudo 权限来启动 TPU 训练。设置为 false 表示不使用 sudo 权限
+use_cpu: false          # 控制是否使用 CPU 进行训练。设置为 false 表示不使用 CPU 进行训练，通常会使用 GPU 进行加速训练
+# 这些配置项主要用于控制训练的计算环境、分布式训练方式、混合精度训练、DeepSpeed优化策略等方面，以实现高效、稳定的深度学习训练
