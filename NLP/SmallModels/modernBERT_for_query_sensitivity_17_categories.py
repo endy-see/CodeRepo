@@ -536,25 +536,6 @@ def training_function(args):
             labels=label_keys
         )
         
-        # Calculate high-level category metrics
-        def get_category_metrics(class_ids):
-            # Convert multi-class to binary for the category
-            y_true_binary = np.isin(all_labels, class_ids).astype(int)
-            y_pred_binary = np.isin(all_predictions, class_ids).astype(int)
-            
-            precision, recall, f1, _ = precision_recall_fscore_support(
-                y_true_binary,
-                y_pred_binary,
-                average='binary',
-                zero_division=0
-            )
-            
-            return precision, recall, f1
-        
-        # Get metrics for each high-level category
-        sensitive_metrics = get_category_metrics(sensitive_ids)
-        informational_metrics = get_category_metrics(informational_ids)
-        tolerant_metrics = get_category_metrics(tolerant_ids)
         
         # Log results using tqdm.write to avoid breaking progress bar
         if accelerator.is_main_process:
@@ -577,24 +558,7 @@ def training_function(args):
                     f"Support: {class_support[i]}"
                 ])
             
-            # Add high-level category metrics
-            eval_results.extend([
-                "\nHigh-level Category Metrics:",
-                f"\nSensitive Metrics:",
-                f"Precision: {sensitive_metrics[0]:.4f}",
-                f"Recall: {sensitive_metrics[1]:.4f}",
-                f"F1 Score: {sensitive_metrics[2]:.4f}",
-                f"\nInformational Metrics:",
-                f"Precision: {informational_metrics[0]:.4f}",
-                f"Recall: {informational_metrics[1]:.4f}",
-                f"F1 Score: {informational_metrics[2]:.4f}",
-                f"\nTolerant Metrics:",
-                f"Precision: {tolerant_metrics[0]:.4f}",
-                f"Recall: {tolerant_metrics[1]:.4f}",
-                f"F1 Score: {tolerant_metrics[2]:.4f}"
-            ])
-            
-            # Use tqdm.write for all output
+            # Output results to console
             tqdm.write('\n'.join(eval_results))
                 
             # Log to tensorboard
@@ -610,17 +574,6 @@ def training_function(args):
                 writer.add_scalar(f'{split}/{class_name}/recall', class_recall[i], epoch)
                 writer.add_scalar(f'{split}/{class_name}/f1', class_f1[i], epoch)
             
-            # Log high-level category metrics
-            categories = [
-                ('Sensitive', sensitive_metrics),
-                ('Informational', informational_metrics),
-                ('Tolerant', tolerant_metrics)
-            ]
-            for cat_name, metrics in categories:
-                writer.add_scalar(f'{split}/{cat_name}/precision', metrics[0], epoch)
-                writer.add_scalar(f'{split}/{cat_name}/recall', metrics[1], epoch)
-                writer.add_scalar(f'{split}/{cat_name}/f1', metrics[2], epoch)
-        
         return avg_loss, precision, recall, f1
     
     # Calculate total steps considering gradient accumulation
