@@ -517,8 +517,43 @@ def training_function(args):
         all_predictions = np.array(all_predictions)
         all_labels = np.array(all_labels)
         
-        # Calculate overall metrics
+        # 计算基础指标
         avg_loss = total_loss.item() / len(dataloader)
+        
+        # 计算三个大类别的指标
+        def get_category_metrics(class_ids):
+            y_true_binary = np.isin(all_labels, class_ids).astype(int)
+            y_pred_binary = np.isin(all_predictions, class_ids).astype(int)
+            
+            # 使用binary average因为是二分类问题
+            precision, recall, f1, _ = precision_recall_fscore_support(
+                y_true_binary,
+                y_pred_binary,
+                average='binary',
+                zero_division=0
+            )
+            return precision, recall, f1, sum(y_true_binary)
+        
+        # 计算sensitive类别的指标
+        sensitive_ids = [i for i, class_name in id2class.items() if class_name in sensitive_classes]
+        sensitive_p, sensitive_r, sensitive_f1, sensitive_support = get_category_metrics(sensitive_ids)
+        
+        # 计算informational类别的指标
+        informational_ids = [i for i, class_name in id2class.items() if class_name in informational_classes]
+        info_p, info_r, info_f1, info_support = get_category_metrics(informational_ids)
+        
+        # 计算tolerant类别的指标
+        tolerant_ids = [i for i, class_name in id2class.items() if class_name in tolerant_classes]
+        tolerant_p, tolerant_r, tolerant_f1, tolerant_support = get_category_metrics(tolerant_ids)
+        
+        # 输出高级类别的指标
+        if accelerator.is_main_process:
+            tqdm.write(f"\nHigh-level Category Metrics:")
+            tqdm.write(f"Sensitive (support: {sensitive_support}): P={sensitive_p:.4f}, R={sensitive_r:.4f}, F1={sensitive_f1:.4f}")
+            tqdm.write(f"Informational (support: {info_support}): P={info_p:.4f}, R={info_r:.4f}, F1={info_f1:.4f}")
+            tqdm.write(f"Tolerant (support: {tolerant_support}): P={tolerant_p:.4f}, R={tolerant_r:.4f}, F1={tolerant_f1:.4f}")
+        
+        # 计算原始17个类别的总体指标
         precision, recall, f1, _ = precision_recall_fscore_support(
             all_labels,
             all_predictions,
@@ -536,25 +571,6 @@ def training_function(args):
             labels=label_keys
         )
         
-        # Calculate high-level category metrics
-        def get_category_metrics(class_ids):
-            # Convert multi-class to binary for the category
-            y_true_binary = np.isin(all_labels, class_ids).astype(int)
-            y_pred_binary = np.isin(all_predictions, class_ids).astype(int)
-            
-            precision, recall, f1, _ = precision_recall_fscore_support(
-                y_true_binary,
-                y_pred_binary,
-                average='binary',
-                zero_division=0
-            )
-            
-            return precision, recall, f1
-        
-        # Get metrics for each high-level category
-        sensitive_metrics = get_category_metrics(sensitive_ids)
-        informational_metrics = get_category_metrics(informational_ids)
-        tolerant_metrics = get_category_metrics(tolerant_ids)
         
         # Log results using tqdm.write to avoid breaking progress bar
         if accelerator.is_main_process:
@@ -577,24 +593,7 @@ def training_function(args):
                     f"Support: {class_support[i]}"
                 ])
             
-            # Add high-level category metrics
-            eval_results.extend([
-                "\nHigh-level Category Metrics:",
-                f"\nSensitive Metrics:",
-                f"Precision: {sensitive_metrics[0]:.4f}",
-                f"Recall: {sensitive_metrics[1]:.4f}",
-                f"F1 Score: {sensitive_metrics[2]:.4f}",
-                f"\nInformational Metrics:",
-                f"Precision: {informational_metrics[0]:.4f}",
-                f"Recall: {informational_metrics[1]:.4f}",
-                f"F1 Score: {informational_metrics[2]:.4f}",
-                f"\nTolerant Metrics:",
-                f"Precision: {tolerant_metrics[0]:.4f}",
-                f"Recall: {tolerant_metrics[1]:.4f}",
-                f"F1 Score: {tolerant_metrics[2]:.4f}"
-            ])
-            
-            # Use tqdm.write for all output
+            # Output results to console
             tqdm.write('\n'.join(eval_results))
                 
             # Log to tensorboard
@@ -603,24 +602,32 @@ def training_function(args):
             writer.add_scalar(f'{split}/overall_recall', recall, epoch)
             writer.add_scalar(f'{split}/overall_f1', f1, epoch)
             
-            # Log per-class metrics to tensorboard
+            # 记录原始类别的指标
             for i in range(len(label_keys)):
                 class_name = id2class[i]
                 writer.add_scalar(f'{split}/{class_name}/precision', class_precision[i], epoch)
                 writer.add_scalar(f'{split}/{class_name}/recall', class_recall[i], epoch)
                 writer.add_scalar(f'{split}/{class_name}/f1', class_f1[i], epoch)
             
-            # Log high-level category metrics
-            categories = [
-                ('Sensitive', sensitive_metrics),
-                ('Informational', informational_metrics),
-                ('Tolerant', tolerant_metrics)
-            ]
-            for cat_name, metrics in categories:
-                writer.add_scalar(f'{split}/{cat_name}/precision', metrics[0], epoch)
-                writer.add_scalar(f'{split}/{cat_name}/recall', metrics[1], epoch)
-                writer.add_scalar(f'{split}/{cat_name}/f1', metrics[2], epoch)
-        
+            # 记录三个高级类别的指标
+            # Sensitive
+            writer.add_scalar(f'{split}/sensitive/precision', sensitive_p, epoch)
+            writer.add_scalar(f'{split}/sensitive/recall', sensitive_r, epoch)
+            writer.add_scalar(f'{split}/sensitive/f1', sensitive_f1, epoch)
+            writer.add_scalar(f'{split}/sensitive/support', sensitive_support, epoch)
+            
+            # Informational
+            writer.add_scalar(f'{split}/informational/precision', info_p, epoch)
+            writer.add_scalar(f'{split}/informational/recall', info_r, epoch)
+            writer.add_scalar(f'{split}/informational/f1', info_f1, epoch)
+            writer.add_scalar(f'{split}/informational/support', info_support, epoch)
+            
+            # Tolerant
+            writer.add_scalar(f'{split}/tolerant/precision', tolerant_p, epoch)
+            writer.add_scalar(f'{split}/tolerant/recall', tolerant_r, epoch)
+            writer.add_scalar(f'{split}/tolerant/f1', tolerant_f1, epoch)
+            writer.add_scalar(f'{split}/tolerant/support', tolerant_support, epoch)
+            
         return avg_loss, precision, recall, f1
     
     # Calculate total steps considering gradient accumulation
