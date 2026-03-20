@@ -165,8 +165,13 @@ def analyze_dividends(ticker: str, verbose: bool = False) -> DividendAnalysis | 
         payment_frequency = None
         if dividends is not None and len(dividends) >= 4:
             # Count dividends in last year
-            one_year_ago = pd.Timestamp.now() - pd.DateOffset(years=1)
-            recent_divs = dividends[dividends.index > one_year_ago]
+            one_year_ago = pd.Timestamp.now(tz='UTC') - pd.DateOffset(years=1)
+            try:
+                recent_divs = dividends[dividends.index > one_year_ago]
+            except TypeError:
+                # Handle tz-aware vs tz-naive mismatch
+                one_year_ago = one_year_ago.tz_localize(None)
+                recent_divs = dividends[dividends.index.tz_localize(None) > one_year_ago]
             count = len(recent_divs)
             
             if count >= 10:

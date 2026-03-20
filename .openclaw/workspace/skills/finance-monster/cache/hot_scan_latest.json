@@ -1,0 +1,485 @@
+{
+  "scan_time": "2026-03-20T07:15:46.841736+00:00",
+  "top_trending": [
+    {
+      "symbol": "BTC",
+      "mentions": 6,
+      "sources": [
+        "CoinGecko Trending",
+        "Google News Crypto"
+      ],
+      "signals": [
+        "\ud83d\udcc9 bearish (-0.2%)"
+      ]
+    },
+    {
+      "symbol": "TAO",
+      "mentions": 3,
+      "sources": [
+        "CoinGecko Movers",
+        "CoinGecko Trending"
+      ],
+      "signals": [
+        "\ud83d\ude80 bullish (+15.0%)",
+        "\ud83d\ude80 pumping (+16.9%)"
+      ]
+    },
+    {
+      "symbol": "ETH",
+      "mentions": 3,
+      "sources": [
+        "CoinGecko Trending",
+        "Google News Crypto"
+      ],
+      "signals": [
+        "\ud83d\udcc9 bearish (-2.4%)"
+      ]
+    },
+    {
+      "symbol": "PI",
+      "mentions": 3,
+      "sources": [
+        "CoinGecko Movers",
+        "CoinGecko Trending"
+      ],
+      "signals": [
+        "\ud83d\ude80 bullish (+5.5%)",
+        "\ud83d\ude80 pumping (+5.4%)"
+      ]
+    },
+    {
+      "symbol": "FET",
+      "mentions": 3,
+      "sources": [
+        "CoinGecko Movers",
+        "CoinGecko Trending"
+      ],
+      "signals": [
+        "\ud83d\ude80 bullish (+7.0%)",
+        "\ud83d\ude80 pumping (+5.1%)"
+      ]
+    },
+    {
+      "symbol": "SMCI",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "GE",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "SPOT",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "FDX",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "AXTI",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "TSEM",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "VET",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "SRRK",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "SIG",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "HYMC",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "CENX",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "FAF",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "AA",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "LB",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    },
+    {
+      "symbol": "NVDA",
+      "mentions": 3,
+      "sources": [
+        "Yahoo Most Active",
+        "Yahoo Losers",
+        "Yahoo Gainers"
+      ],
+      "signals": []
+    }
+  ],
+  "crypto_highlights": [
+    {
+      "symbol": "TAO",
+      "name": "Bittensor",
+      "rank": 35,
+      "price_change_24h": 14.95,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "PHA",
+      "name": "PHALA",
+      "rank": 604,
+      "price_change_24h": 27.28,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "PENGU",
+      "name": "Pudgy Penguins",
+      "rank": 104,
+      "price_change_24h": -0.61,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "SN3",
+      "name": "\u03c4emplar",
+      "rank": 258,
+      "price_change_24h": 45.18,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "BTC",
+      "name": "Bitcoin",
+      "rank": 1,
+      "price_change_24h": -0.19,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "HYPE",
+      "name": "Hyperliquid",
+      "rank": 14,
+      "price_change_24h": -4.31,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "ETH",
+      "name": "Ethereum",
+      "rank": 2,
+      "price_change_24h": -2.45,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "PI",
+      "name": "Pi Network",
+      "rank": 45,
+      "price_change_24h": 5.51,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "PEPE",
+      "name": "Pepe",
+      "rank": 55,
+      "price_change_24h": -0.98,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "FET",
+      "name": "Artificial Superintelligence Alliance",
+      "rank": 96,
+      "price_change_24h": 6.97,
+      "source": "coingecko_trending"
+    },
+    {
+      "symbol": "M",
+      "name": "MemeCore",
+      "price": 1.71,
+      "change_24h": -9.11,
+      "volume": 11419597,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "WLD",
+      "name": "Worldcoin",
+      "price": 0.328816,
+      "change_24h": -5.5,
+      "volume": 190469201,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "APT",
+      "name": "Aptos",
+      "price": 1.02,
+      "change_24h": 5.27,
+      "volume": 93307363,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "WLFI",
+      "name": "World Liberty Financial",
+      "price": 0.091699,
+      "change_24h": -5.1,
+      "volume": 54672118,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "ZEC",
+      "name": "Zcash",
+      "price": 233.6,
+      "change_24h": -4.6,
+      "volume": 339515893,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "KAS",
+      "name": "Kaspa",
+      "price": 0.03774206,
+      "change_24h": -4.24,
+      "volume": 38167525,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "TON",
+      "name": "Toncoin",
+      "price": 1.22,
+      "change_24h": -3.93,
+      "volume": 115469888,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "QNT",
+      "name": "Quant",
+      "price": 77.83,
+      "change_24h": 3.79,
+      "volume": 32465559,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "HASH",
+      "name": "Provenance Blockchain",
+      "price": 0.01392257,
+      "change_24h": -3.59,
+      "volume": 9028.47,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "SHIB",
+      "name": "Shiba Inu",
+      "price": 5.96e-06,
+      "change_24h": 3.52,
+      "volume": 159966286,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "NIGHT",
+      "name": "Midnight",
+      "price": 0.04415276,
+      "change_24h": -3.15,
+      "volume": 295622500,
+      "source": "coingecko_movers"
+    },
+    {
+      "symbol": "ZRO",
+      "name": "LayerZero",
+      "price": 2.03,
+      "change_24h": -3.05,
+      "volume": 70101689,
+      "source": "coingecko_movers"
+    }
+  ],
+  "stock_highlights": [
+    {
+      "symbol": "SMCI",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "GE",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "SPOT",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "FDX",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "AXTI",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "TSEM",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "VET",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "SRRK",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "SIG",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "HYMC",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "CENX",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "FAF",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "AA",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "LB",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    },
+    {
+      "symbol": "NVDA",
+      "category": "gainers",
+      "source": "yahoo_gainers"
+    }
+  ],
+  "social_buzz": [],
+  "breaking_news": [
+    {
+      "title": "Nexstar Closes $6.2 Billion Tegna Merger, Creating Local TV Giant - The Hollywood Reporter",
+      "tickers": [
+        "TV"
+      ]
+    },
+    {
+      "title": "Stock Market News, March 19, 2026: Brent Crude Retreats After Touching $119 - WSJ",
+      "tickers": [
+        "WSJ"
+      ]
+    },
+    {
+      "title": "FedEx beats on top and bottom lines, raises guidance on strong performance - CNBC",
+      "tickers": [
+        "CNBC"
+      ]
+    },
+    {
+      "title": "Justice Department probe of Powell could backfire on Trump and keep Fed chair in office - PBS",
+      "tickers": [
+        "PBS"
+      ]
+    }
+  ]
+}

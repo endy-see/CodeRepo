@@ -4,22 +4,41 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 ## 📈 金融数据查询路由
 
-### ETF基金查询（51/15/16/50/58开头的代码）
-**必须使用** `akshare-wrapper` 技能的脚本：
-```bash
-exec python ~/.openclaw/workspace/skills/akshare-wrapper/main.py "513180 今日表现"
-```
-❗ **不要** 在内联代码中调用 `fund_etf_hist_em()` 或 `fund_etf_spot_em()` 或 `stock_zh_a_spot_em()` —— 东方财富接口反爬会导致超时断连。
+**唯一金融技能: `finance-monster`** — 所有金融相关问题统一使用。
 
-### A股个股/大盘/板块查询
-**推荐使用** `akshare-wrapper` 技能的脚本：
+### 中国A股/ETF/板块
 ```bash
-exec python ~/.openclaw/workspace/skills/akshare-wrapper/main.py "A股大盘"
-exec python ~/.openclaw/workspace/skills/akshare-wrapper/main.py "600519 最新行情"
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_market.py "大盘行情"
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_market.py "600519"
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_market.py "贵州茅台"
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_market.py "ETF 513180"
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_market.py "行业板块"
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_market.py "今日涨停"
 ```
 
-### 美股/加密货币
-使用 `stock-analysis` 技能（Yahoo Finance）。
+### 中国期货/期权
+```bash
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_derivatives.py futures-board --symbol PTA
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_derivatives.py futures-indicators --contract IF2603 --period 5
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_derivatives.py options-greeks --underlying 510050
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/china_derivatives.py options-rr25 --underlying 510050
+```
+
+### 美股/全球/加密货币
+```bash
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/global_market.py AAPL --fast
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/dividends.py AAPL
+```
+
+### 投资组合/自选股/热点/传闻
+```bash
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/portfolio.py list
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/watchlist.py list
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/hot_scanner.py
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/rumor_scanner.py
+```
+
+❗ **严禁使用东方财富 `*_em` 批量接口！** 已全面反爬封禁。
 
 ---
 
