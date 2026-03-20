@@ -91,7 +91,7 @@
     "bind": "loopback",
     "auth": {
       "mode": "token",
-      "token": "dccb8f41c7d2d0233dfc9755532834f922488e7c496b0afc"
+      "token": "<YOUR_GATEWAY_TOKEN>"
     },
     "tailscale": {
       "mode": "off",
