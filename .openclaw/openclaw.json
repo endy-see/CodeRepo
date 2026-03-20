@@ -91,7 +91,7 @@
     "bind": "loopback",
     "auth": {
       "mode": "token",
-      "token": "<YOUR_GATEWAY_TOKEN>"
+      "token": "REDACTED_GATEWAY_TOKEN"
     },
     "tailscale": {
       "mode": "off",
@@ -115,7 +115,7 @@
         "apiKey": "ei"
       },
       "nano-banana-pro": {
-        "apiKey": "AIzaSyDqK2NGd9FiwY5Ixq-xzL2sJsZhRyPW4CI"
+        "apiKey": "REDACTED_GOOGLE_API_KEY"
       }
     }
   },
@@ -127,3 +127,5 @@
     }
   }
 }
+
+

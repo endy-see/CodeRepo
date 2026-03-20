@@ -49,3 +49,6 @@ call_model.py
 # workspace 内的运行时/缓存文件
 .openclaw/workspace/.learnings/
 .openclaw/workspace/.clawhub/
+.openclaw/workspace/skills/finance-monster/cache/*.png
+# workspace-finance/skills 是 junction，不追踪
+.openclaw/workspace-finance/skills/

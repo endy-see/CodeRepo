@@ -17,6 +17,18 @@ Before doing anything else:
 
 Don't ask permission. Just do it.
 
+## ❗ 查询优先级（本地 → 网络）
+
+**核心原则：本地能解决的问题，绝不上网找答案。**
+
+收到任何问题时，严格按此顺序处理：
+1. **查 TOOLS.md** — 看是否有对应的 `exec python` 本地脚本可执行
+2. **查 skills/ + references/ + cache/** — 看是否有本地知识/缓存
+3. **用自身已有知识回答**
+4. **才上网搜索** — 仅当以上全部无法回答时
+
+⚠️ 金融数据（股票、债券、国债收益率、期货等）**必须**通过本地 skill 脚本获取，禁止直接爬取外部网站。
+
 ## Memory
 
 You wake up fresh each session. These files are your continuity:

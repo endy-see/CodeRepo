@@ -1,9 +1,12 @@
 ---
 name: finance-monster
 description: |
-  终极金融分析技能 — 覆盖中国A股/ETF/期货/期权、美股/港股/加密货币、
-  投资组合管理、股息分析、热点扫描、研报方法论等全方位能力。
-  唯一金融技能，所有金融相关问题都路由到这里。
+  使用此技能当用户问到：股票、A股、ETF、基金、期货、期权、加密货币、投资组合、
+  国债、收益率、利率、利差、10年期、30年期、大盘、涨停、跌停、板块、行业、
+  美股、港股、BTC、行情、走势、K线、技术指标、MACD、RSI、中美利差、
+  bond yield、treasury、stock、crypto、futures、options。
+  本技能包含可执行的Python脚本，直接exec运行即可获取实时数据，无需上网搜索。
+  所有金融/宏观数据问题都必须使用此技能的本地脚本，禁止从网上爬数据。
 version: 1.0.0
 ---
 
@@ -11,11 +14,15 @@ version: 1.0.0
 
 > **唯一金融技能**：所有关于股票、基金、ETF、期货、期权、加密货币、投资组合的问题一律使用本技能。
 
+> **⚠️ 核心原则：所有金融数据必须通过本地脚本获取，严禁自行从网上抓取！**
+> 每个模块都有对应的 Python 脚本，用 `exec python scripts/xxx.py` 调用即可获得数据。
+> 不要尝试访问 Bloomberg、TradingEconomics、FRED、Chinamoney 等外部网站，本地 akshare/yfinance 数据源已全面覆盖。
+
 ---
 
 ## 模块架构
 
-本技能由 5 大模块组成：
+本技能由 6 大模块组成：
 
 ### 模块 1: 🇨🇳 中国市场数据 (`china_market.py`)
 A股、ETF、指数、行业/概念板块、涨停跌停
@@ -107,6 +114,29 @@ python scripts/portfolio_tools.py rumor-scan
 
 ---
 
+### 模块 6: 📈 宏观市场指标 (`macro_indicators.py`)
+10年期/30年期国债收益率（中国 & 美国），中美利差
+
+**支持查询：**
+- 10年期国债收益率（中国 & 美国）
+- 30年期国债收益率（中国 & 美国）
+- 10年+30年同时查询
+- 中美利差计算
+- 自定义时间范围（最近N天/N月/N年/半年）
+- **走势图可视化**（查询含"走势图/趋势/可视化"或加 `--chart` 自动生成PNG）
+
+**数据源：** akshare `bond_zh_us_rate`（新浪/同花顺）
+
+**调用方式：**
+```bash
+python scripts/macro_indicators.py "最近一年10年期国债收益率"
+python scripts/macro_indicators.py "30年期国债收益率" --chart
+python scripts/macro_indicators.py "最近半年国债收益率走势图"
+python scripts/macro_indicators.py "中国最近3个月10年和30年国债收益率"
+```
+
+---
+
 ### 模块 5: 🔍 研究方法论（内置规则，无脚本）
 投资研究的质量控制和信息源验证
 
@@ -125,7 +155,9 @@ python scripts/portfolio_tools.py rumor-scan
 
 ## 路由规则
 
-Agent 在收到金融相关问题时，按以下规则选择模块：
+Agent 在收到金融相关问题时，**必须执行对应的本地 Python 脚本**，不要自行从互联网抓取数据。
+
+**执行方式：** `exec python ~/.openclaw/workspace/skills/finance-monster/scripts/<脚本> <参数>`
 
 | 用户意图 | 模块 | 脚本 |
 |---|---|---|
@@ -134,6 +166,13 @@ Agent 在收到金融相关问题时，按以下规则选择模块：
 | 美股/港股/加密货币分析 | 模块3 | `global_market.py` |
 | 投资组合/自选股/热点/传闻 | 模块4 | `portfolio_tools.py` |
 | 投资研究方法论/信源验证 | 模块5 | 参考 references/ |
+| **国债收益率/利率/中美利差/宏观指标** | **模块6** | **`macro_indicators.py`** |
+
+### 模块6 路由关键词
+以下关键词命中时，**必须**执行 `macro_indicators.py`：
+- 国债、收益率、利率、10年期、30年期、十年期、三十年期
+- 中美利差、treasury yield、bond yield
+- 宏观指标、利率走势
 
 ## 关键参考数据
 

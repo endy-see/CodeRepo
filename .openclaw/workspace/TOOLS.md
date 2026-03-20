@@ -38,6 +38,25 @@ exec python ~/.openclaw/workspace/skills/finance-monster/scripts/hot_scanner.py
 exec python ~/.openclaw/workspace/skills/finance-monster/scripts/rumor_scanner.py
 ```
 
+### 国债收益率/中美利差/宏观指标
+**关键词：** 国债、收益率、利率、10年期、30年期、中美利差、treasury yield、bond yield
+**⚠️ 禁止自行从网上抓取国债数据！** 本地已有完整数据源（akshare），直接执行脚本即可。
+```bash
+# 查询最近一年10年期和30年期国债收益率（文字输出）
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/macro_indicators.py "最近一年10年期和30年期国债收益率"
+
+# 查询并生成走势图（加 --chart 或在查询中包含"走势图/趋势/可视化"）
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/macro_indicators.py "最近一年10年期和30年期国债收益率" --chart
+
+# 仅30年期
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/macro_indicators.py "30年期国债收益率走势图"
+
+# 自定义时间范围
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/macro_indicators.py "最近半年国债收益率"
+exec python ~/.openclaw/workspace/skills/finance-monster/scripts/macro_indicators.py "最近3个月10年期国债收益率"
+```
+图表会保存为 PNG 文件，输出中会包含路径，请将该图片展示给用户。
+
 ❗ **严禁使用东方财富 `*_em` 批量接口！** 已全面反爬封禁。
 
 ---
