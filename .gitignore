@@ -1,0 +1,51 @@
+# 含真实密钥的迁移脚本，禁止推送
+migrate-openclaw.ps1
+
+# 本地 call_model 测试脚本（可能含 key）
+call_model.py
+
+# ═══════════════════════════════════════════════════
+# .openclaw 中不需要跨电脑同步的目录/文件
+# 只保留: agents/ workspace*/ openclaw.json
+# ═══════════════════════════════════════════════════
+
+# 移动端 Canvas 测试页 — 本地自动生成
+.openclaw/canvas/
+
+# Shell 自动补全脚本 — 本地自动生成
+.openclaw/completions/
+
+# OAuth/凭据缓存 — 每台电脑独立生成
+.openclaw/credentials/
+
+# 定时任务状态 — 运行时产生
+.openclaw/cron/
+
+# 已配对设备列表 — 每台电脑独立
+.openclaw/devices/
+
+# 设备身份密钥对 — 每台电脑必须独立生成，不可复制
+.openclaw/identity/
+
+# 运行日志 — 无需同步
+.openclaw/logs/
+
+# Agent 运行时内存 — 跨电脑同步（保留跟踪）
+# .openclaw/memory/
+
+# 子 Agent 运行时状态
+.openclaw/subagents/
+
+# 配置备份文件
+.openclaw/openclaw.json.bak
+.openclaw/openclaw.json.bak.*
+
+# Gateway 启动脚本 — 本地生成
+.openclaw/gateway.cmd
+
+# 更新检查缓存
+.openclaw/update-check.json
+
+# workspace 内的运行时/缓存文件
+.openclaw/workspace/.learnings/
+.openclaw/workspace/.clawhub/
