@@ -1,0 +1,842 @@
+{
+  "agent:main:main": {
+    "sessionId": "d6963fec-5fe4-4733-a6ba-80709c57b841",
+    "updatedAt": 1773911149127,
+    "systemSent": true,
+    "abortedLastRun": false,
+    "chatType": "direct",
+    "deliveryContext": {
+      "channel": "webchat"
+    },
+    "lastChannel": "webchat",
+    "origin": {
+      "provider": "webchat",
+      "surface": "webchat",
+      "chatType": "direct"
+    },
+    "sessionFile": "C:\\Users\\yanmeizhao\\.openclaw\\agents\\main\\sessions\\d6963fec-5fe4-4733-a6ba-80709c57b841.jsonl",
+    "compactionCount": 0,
+    "skillsSnapshot": {
+      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>clawhub</name>\n    <description>Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.</description>\n    <location>~/AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\clawhub\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>coding-agent</name>\n    <description>Delegate coding tasks to Codex, Claude Code, or Pi agents via background process. Use when: (1) building/creating new features or apps, (2) reviewing PRs (spawn in temp dir), (3) refactoring large codebases, (4) iterative coding that needs file exploration. NOT for: simple one-liner fixes (just edit), reading code (use read tool), thread-bound ACP harness requests in chat (for example spawn/run Codex or Claude Code in a Discord thread; use sessions_spawn with runtime:&quot;acp&quot;), or any work in ~/clawd workspace (never spawn agents here). Claude Code: use --print --permission-mode bypassPermissions (no PTY). Codex/Pi/OpenCode: pty:true required.</description>\n    <location>~/AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\coding-agent\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gh-issues</name>\n    <description>Fetch GitHub issues, spawn sub-agents to implement fixes and open PRs, then monitor and address PR review comments. Usage: /gh-issues [owner/repo] [--label bug] [--limit 5] [--milestone v1.0] [--assignee @me] [--fork user/repo] [--watch] [--interval 5] [--reviews-only] [--cron] [--dry-run] [--model glm-5] [--notify-channel -1002381931352]</description>\n    <location>~/AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\gh-issues\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>GitHub operations via `gh` CLI: issues, PRs, CI runs, code review, API queries. Use when: (1) checking PR status or CI, (2) creating/commenting on issues, (3) listing/filtering PRs or issues, (4) viewing run logs. NOT for: complex web UI interactions requiring manual browser flows (use browser tooling when available), bulk operations across many repos (script with gh api), or when gh auth is not configured.</description>\n    <location>~/AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\github\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>~/AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\healthcheck\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>~/AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\skill-creator\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts via wttr.in or Open-Meteo. Use when: user asks about weather, temperature, or forecasts for any location. NOT for: historical weather data, severe weather alerts, or detailed meteorological analysis. No API key needed.</description>\n    <location>~/AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\weather\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>appinsights-instrumentation</name>\n    <description>Guidance for instrumenting webapps with Azure Application Insights. Provides telemetry patterns, SDK setup, and configuration references. WHEN: how to instrument app, App Insights SDK, telemetry patterns, what is App Insights, Application Insights guidance, instrumentation examples, APM best practices.</description>\n    <location>~/.agents\\skills\\appinsights-instrumentation\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-ai</name>\n    <description>Use for Azure AI: Search, Speech, OpenAI, Document Intelligence. Helps with search, vector/hybrid search, speech-to-text, text-to-speech, transcription, OCR. WHEN: AI Search, query search, vector search, hybrid search, semantic search, speech-to-text, text-to-speech, transcribe, OCR, convert text to speech.</description>\n    <location>~/.agents\\skills\\azure-ai\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-aigateway</name>\n    <description>Configure Azure API Management as an AI Gateway for AI models, MCP tools, and agents. WHEN: semantic caching, token limit, content safety, load balancing, AI model governance, MCP rate limiting, jailbreak detection, add Azure OpenAI backend, add AI Foundry model, test AI gateway, LLM policies, configure AI backend, token metrics, AI cost control, convert API to MCP, import OpenAPI to gateway.</description>\n    <location>~/.agents\\skills\\azure-aigateway\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-cloud-migrate</name>\n    <description>Assess and migrate cross-cloud workloads to Azure. Generates assessment reports and converts code from AWS, GCP, or other providers to Azure services. WHEN: migrate Lambda to Azure Functions, migrate AWS to Azure, Lambda migration assessment, convert AWS serverless to Azure, migration readiness report, migrate from AWS, migrate from GCP, cross-cloud migration.</description>\n    <location>~/.agents\\skills\\azure-cloud-migrate\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-compliance</name>\n    <description>Comprehensive Azure compliance and security auditing capabilities including best practices assessment, Key Vault expiration monitoring, and resource configuration validation. WHEN: compliance scan, security audit, BEFORE running azqr (compliance cli tool), Azure best practices, Key Vault expiration check, compliance assessment, resource review, configuration validation, expired certificates, expiring secrets, orphaned resources, policy compliance, security posture evaluation.</description>\n    <location>~/.agents\\skills\\azure-compliance\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-compute</name>\n    <description>Recommend Azure VM sizes, VM Scale Sets (VMSS), and configurations based on workload requirements, performance needs, and budget constraints. No Azure account required — uses public documentation and the Azure Retail Prices API. WHEN: recommend VM size, which VM should I use, choose Azure VM, VM for web/database/ML/batch/HPC, GPU VM, compare VM sizes, cheapest VM, best VM for workload, VM pricing, cost estimate, burstable/compute/memory/storage optimized VM, confidential computing, VM trade-offs, VM families, VMSS, scale set recommendation, autoscale VMs, load balanced VMs, VMSS vs VM, scale out, horizontal scaling, flexible orchestration.</description>\n    <location>~/.agents\\skills\\azure-compute\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-cost-optimization</name>\n    <description>Identify and quantify cost savings across Azure subscriptions by analyzing actual costs, utilization metrics, and generating actionable optimization recommendations. USE FOR: optimize Azure costs, reduce Azure spending, reduce Azure expenses, analyze Azure costs, find cost savings, generate cost optimization report, find orphaned resources, rightsize VMs, cost analysis, reduce waste, Azure spending analysis, find unused resources, optimize Redis costs. DO NOT USE FOR: deploying resources (use azure-deploy), general Azure diagnostics (use azure-diagnostics), security issues (use azure-security)</description>\n    <location>~/.agents\\skills\\azure-cost-optimization\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-deploy</name>\n    <description>Execute Azure deployments for ALREADY-PREPARED applications that have existing .azure/plan.md and infrastructure files. DO NOT use this skill when the user asks to CREATE a new application — use azure-prepare instead. This skill runs azd up, azd deploy, terraform apply, and az deployment commands with built-in error recovery. Requires .azure/plan.md from azure-prepare and validated status from azure-validate. WHEN: &quot;run azd up&quot;, &quot;run azd deploy&quot;, &quot;execute deployment&quot;, &quot;push to production&quot;, &quot;push to cloud&quot;, &quot;go live&quot;, &quot;ship it&quot;, &quot;bicep deploy&quot;, &quot;terraform apply&quot;, &quot;publish to Azure&quot;, &quot;launch on Azure&quot;. DO NOT USE WHEN: &quot;create and deploy&quot;, &quot;build and deploy&quot;, &quot;create a new app&quot;, &quot;set up infrastructure&quot;, &quot;create and deploy to Azure using Terraform&quot; — use azure-prepare for these.</description>\n    <location>~/.agents\\skills\\azure-deploy\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-diagnostics</name>\n    <description>Debug and troubleshoot Azure Container Apps and Function Apps production issues using log analysis, health checks, and KQL. WHEN: debug production issues, troubleshoot containerized apps, troubleshoot Azure Functions, analyze logs with KQL, fix image pull failures, investigate health probe failures, troubleshoot cold starts, check resource health, find root cause of errors, function not working.</description>\n    <location>~/.agents\\skills\\azure-diagnostics\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-hosted-copilot-sdk</name>\n    <description>Build and deploy GitHub Copilot SDK apps to Azure. WHEN: build copilot app, create copilot app, copilot SDK, @github/copilot-sdk, scaffold copilot project, copilot-powered app, deploy copilot app, host on azure, azure model, BYOM, bring your own model, use my own model, azure openai model, DefaultAzureCredential, self-hosted model, copilot SDK service, chat app with copilot, copilot-sdk-service template, azd init copilot, CopilotClient, createSession, sendAndWait, GitHub Models API.</description>\n    <location>~/.agents\\skills\\azure-hosted-copilot-sdk\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-kusto</name>\n    <description>Query and analyze data in Azure Data Explorer (Kusto/ADX) using KQL for log analytics, telemetry, and time series analysis. WHEN: KQL queries, Kusto database queries, Azure Data Explorer, ADX clusters, log analytics, time series data, IoT telemetry, anomaly detection.</description>\n    <location>~/.agents\\skills\\azure-kusto\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-messaging</name>\n    <description>Troubleshoot and resolve issues with Azure Messaging SDKs for Event Hubs and Service Bus. Covers connection failures, authentication errors, message processing issues, and SDK configuration problems. WHEN: event hub SDK error, service bus SDK issue, messaging connection failure, AMQP error, event processor host issue, message lock lost, send timeout, receiver disconnected, SDK troubleshooting, azure messaging SDK, event hub consumer, service bus queue issue, topic subscription error, enable logging event hub, service bus logging, eventhub python, servicebus java, eventhub javascript, servicebus dotnet, event hub checkpoint, event hub not receiving messages, service bus dead letter.</description>\n    <location>~/.agents\\skills\\azure-messaging\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-observability</name>\n    <description>Azure Observability Services including Azure Monitor, Application Insights, Log Analytics, Alerts, and Workbooks. Provides metrics, APM, distributed tracing, KQL queries, and interactive reports. USE FOR: Azure Monitor, Application Insights, Log Analytics, Alerts, Workbooks, metrics, APM, distributed tracing, KQL queries, interactive reports, observability, monitoring dashboards. DO NOT USE FOR: instrumenting apps with App Insights SDK (use appinsights-instrumentation), querying Kusto/ADX clusters (use azure-kusto), cost analysis (use azure-cost-optimization).</description>\n    <location>~/.agents\\skills\\azure-observability\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-prepare</name>\n    <description>Prepare Azure apps for deployment (infra Bicep/Terraform, azure.yaml, Dockerfiles). Use for create/modernize or create+deploy; not cross-cloud migration (use azure-cloud-migrate). WHEN: &quot;create app&quot;, &quot;build web app&quot;, &quot;create API&quot;, &quot;create serverless HTTP API&quot;, &quot;create frontend&quot;, &quot;create back end&quot;, &quot;build a service&quot;, &quot;modernize application&quot;, &quot;update application&quot;, &quot;add authentication&quot;, &quot;add caching&quot;, &quot;host on Azure&quot;, &quot;create and deploy&quot;, &quot;deploy to Azure&quot;, &quot;deploy to Azure using Terraform&quot;, &quot;deploy to Azure App Service&quot;, &quot;deploy to Azure App Service using Terraform&quot;, &quot;deploy to Azure Container Apps&quot;, &quot;deploy to Azure Container Apps using Terraform&quot;, &quot;generate Terraform&quot;, &quot;generate Bicep&quot;, &quot;function app&quot;, &quot;timer trigger&quot;, &quot;service bus trigger&quot;, &quot;event-driven function&quot;, &quot;containerized Node.js app&quot;, &quot;social media app&quot;, &quot;static portfolio website&quot;, &quot;todo list with frontend and API&quot;, &quot;prepare my Azure application to use Key Vault&quot;, &quot;managed identity&quot;.</description>\n    <location>~/.agents\\skills\\azure-prepare\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-quotas</name>\n    <description>Check/manage Azure quotas and usage across providers. For deployment planning, capacity validation, region selection. WHEN: &quot;check quotas&quot;, &quot;service limits&quot;, &quot;current usage&quot;, &quot;request quota increase&quot;, &quot;quota exceeded&quot;, &quot;validate capacity&quot;, &quot;regional availability&quot;, &quot;provisioning limits&quot;, &quot;vCPU limit&quot;, &quot;how many vCPUs available in my subscription&quot;.</description>\n    <location>~/.agents\\skills\\azure-quotas\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-rbac</name>\n    <description>Helps users find the right Azure RBAC role for an identity with least privilege access, then generate CLI commands and Bicep code to assign it. Also provides guidance on permissions required to grant roles. WHEN: what role should I assign, least privilege role, RBAC role for, role to read blobs, role for managed identity, custom role definition, assign role to identity, what role do I need to grant access, permissions to assign roles.</description>\n    <location>~/.agents\\skills\\azure-rbac\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-resource-lookup</name>\n    <description>List, find, and show Azure resources. Answers &quot;list my VMs&quot;, &quot;show my storage accounts&quot;, &quot;list websites&quot;, &quot;find container apps&quot;, &quot;what resources do I have&quot;, and similar queries for any Azure resource type. USE FOR: list resources, list virtual machines, list VMs, list storage accounts, list websites, list web apps, list container apps, show resources, find resources, what resources do I have, list resources in resource group, list resources in subscription, find resources by tag, find orphaned resources, resource inventory, count resources by type, cross-subscription resource query, Azure Resource Graph, resource discovery, list container registries, list SQL servers, list Key Vaults, show resource groups, list app services, find resources across subscriptions, find unattached disks, tag analysis. DO NOT USE FOR: deploying resources (use azure-deploy), creating or modifying resources, cost optimization (use azure-cost-optimization), writing application code, non-Azure clouds.</description>\n    <location>~/.agents\\skills\\azure-resource-lookup\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-resource-visualizer</name>\n    <description>Analyze Azure resource groups and generate detailed Mermaid architecture diagrams showing the relationships between individual resources. USE FOR: create architecture diagram, visualize Azure resources, show resource relationships, generate Mermaid diagram, analyze resource group, diagram my resources, architecture visualization, resource topology, map Azure infrastructure DO NOT USE FOR: creating/modifying resources (use azure-deploy), security scanning (use azure-security), performance troubleshooting (use azure-diagnostics), code generation (use relevant service skill)</description>\n    <location>~/.agents\\skills\\azure-resource-visualizer\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-storage</name>\n    <description>Azure Storage Services including Blob Storage, File Shares, Queue Storage, Table Storage, and Data Lake. Provides object storage, SMB file shares, async messaging, NoSQL key-value, and big data analytics capabilities. Includes access tiers (hot, cool, archive) and lifecycle management. USE FOR: blob storage, file shares, queue storage, table storage, data lake, upload files, download blobs, storage accounts, access tiers, lifecycle management. DO NOT USE FOR: SQL databases, Cosmos DB (use azure-prepare), messaging with Event Hubs or Service Bus (use azure-messaging).</description>\n    <location>~/.agents\\skills\\azure-storage\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-upgrade</name>\n    <description>Assess and upgrade Azure workloads between plans, tiers, or SKUs within Azure. Generates assessment reports and automates upgrade steps. WHEN: upgrade Consumption to Flex Consumption, upgrade Azure Functions plan, migrate hosting plan, upgrade Functions SKU, move to Flex Consumption, upgrade Azure service tier, change hosting plan, upgrade function app plan, migrate App Service to Container Apps.</description>\n    <location>~/.agents\\skills\\azure-upgrade\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>azure-validate</name>\n    <description>Pre-deployment validation for Azure readiness. Run deep checks on configuration, infrastructure (Bicep or Terraform), permissions, and prerequisites before deploying. WHEN: validate my app, check deployment readiness, run preflight checks, verify configuration, check if ready to deploy, validate azure.yaml, validate Bicep, test before deploying, troubleshoot deployment errors, validate Azure Functions, validate function app, validate serverless deployment.</description>\n    <location>~/.agents\\skills\\azure-validate\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>entra-app-registration</name>\n    <description>Guides Microsoft Entra ID app registration, OAuth 2.0 authentication, and MSAL integration. USE FOR: create app registration, register Azure AD app, configure OAuth, set up authentication, add API permissions, generate service principal, MSAL example, console app auth, Entra ID setup, Azure AD authentication. DO NOT USE FOR: Azure RBAC or role assignments (use azure-rbac), Key Vault secrets (use azure-keyvault-expiration-audit), Azure resource security (use azure-security).</description>\n    <location>~/.agents\\skills\\entra-app-registration\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>capacity</name>\n    <description>Discovers available Azure OpenAI model capacity across regions and projects. Analyzes quota limits, compares availability, and recommends optimal deployment locations based on capacity requirements. USE FOR: find capacity, check quota, where can I deploy, capacity discovery, best region for capacity, multi-project capacity search, quota analysis, model availability, region comparison, check TPM availability. DO NOT USE FOR: actual deployment (hand off to preset or customize after discovery), quota increase requests (direct user to Azure Portal), listing existing deployments.</description>\n    <location>~/.agents\\skills\\microsoft-foundry\\models\\deploy-model\\capacity\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>customize</name>\n    <description>Interactive guided deployment flow for Azure OpenAI models with full customization control. Step-by-step selection of model version, SKU (GlobalStandard/Standard/ProvisionedManaged), capacity, RAI policy (content filter), and advanced options (dynamic quota, priority processing, spillover). USE FOR: custom deployment, customize model deployment, choose version, select SKU, set capacity, configure content filter, RAI policy, deployment options, detailed deployment, advanced deployment, PTU deployment, provisioned throughput. DO NOT USE FOR: quick deployment to optimal region (use preset).</description>\n    <location>~/.agents\\skills\\microsoft-foundry\\models\\deploy-model\\customize\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>preset</name>\n    <description>Intelligently deploys Azure OpenAI models to optimal regions by analyzing capacity across all available regions. Automatically checks current region first and shows alternatives if needed. USE FOR: quick deployment, optimal region, best region, automatic region selection, fast setup, multi-region capacity check, high availability deployment, deploy to best location. DO NOT USE FOR: custom SKU selection (use customize), specific version selection (use customize), custom capacity configuration (use customize), PTU deployments (use customize).</description>\n    <location>~/.agents\\skills\\microsoft-foundry\\models\\deploy-model\\preset\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deploy-model</name>\n    <description>Unified Azure OpenAI model deployment skill with intelligent intent-based routing. Handles quick preset deployments, fully customized deployments (version/SKU/capacity/RAI policy), and capacity discovery across regions and projects. USE FOR: deploy model, deploy gpt, create deployment, model deployment, deploy openai model, set up model, provision model, find capacity, check model availability, where can I deploy, best region for model, capacity analysis. DO NOT USE FOR: listing existing deployments (use foundry_models_deployments_list MCP tool), deleting deployments, agent creation (use agent/create), project creation (use project/create).</description>\n    <location>~/.agents\\skills\\microsoft-foundry\\models\\deploy-model\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>microsoft-foundry</name>\n    <description>Deploy, evaluate, and manage Foundry agents end-to-end: Docker build, ACR push, hosted/prompt agent create, container start, batch eval, prompt optimization, prompt optimizer workflows, agent.yaml, dataset curation from traces. USE FOR: deploy agent to Foundry, hosted agent, create agent, invoke agent, evaluate agent, run batch eval, optimize prompt, improve prompt, prompt optimization, prompt optimizer, improve agent instructions, optimize agent instructions, optimize system prompt, deploy model, Foundry project, RBAC, role assignment, permissions, quota, capacity, region, troubleshoot agent, deployment failure, create dataset from traces, dataset versioning, eval trending, create AI Services, Cognitive Services, create Foundry resource, provision resource, knowledge index, agent monitoring, customize deployment, onboard, availability. DO NOT USE FOR: Azure Functions, App Service, general Azure deploy (use azure-deploy), general Azure prep (use azure-prepare).</description>\n    <location>~/.agents\\skills\\microsoft-foundry\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>akshare-wrapper</name>\n    <description>A股分析技能包装器，基于akshare数据源。支持实时行情、个股分析、板块轮动、资金流向等A股分析功能。使用自然语言查询A股市场数据。</description>\n    <location>~/.openclaw\\workspace\\skills\\akshare-wrapper\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>china-stock-analysis</name>\n    <description>Analyze Chinese stock prices (A-shares, HK stocks) and provide investment recommendations. Use when the user asks about stock analysis for Chinese companies, including buying/selling recommendations and market trends.</description>\n    <location>~/.openclaw\\workspace\\skills\\china-stock-analysis\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>finance-official-research</name>\n    <description>Analyze stocks, ETFs, mutual funds, listed companies, financial statements, disclosures, index constituents, and investment questions using official or primary-source data only. Use when the user asks for stock analysis, fund analysis, company fundamentals, valuation inputs, portfolio holdings, earnings interpretation, exchange filings, prospectus/report review, or investment due diligence and requires authoritative, citation-backed answers verified against official disclosure sites before answering.</description>\n    <location>~/.openclaw\\workspace\\skills\\finance-official-research\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>install-scientify</name>\n    <description>Use this when the user wants to install or set up the Scientify research plugin. Adds research-pipeline, literature-survey, idea-generation, arxiv tools, and workspace management.</description>\n    <location>~/.openclaw\\workspace\\skills\\install-scientify\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>stock-analysis</name>\n    <description>Analyze stocks and cryptocurrencies using Yahoo Finance data. Supports portfolio management, watchlists with alerts, dividend analysis, 8-dimension stock scoring, viral trend detection (Hot Scanner), and rumor/early signal detection. Use for stock analysis, portfolio tracking, earnings reactions, crypto monitoring, trending stocks, or finding rumors before they hit mainstream.</description>\n    <location>~/.openclaw\\workspace\\skills\\stock-analysis\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>akshare-stock</name>\n    <description>A股量化数据分析工具，基于AkShare库获取A股行情、财务数据、板块信息等。用于回答关于A股股票查询、行情数据、财务分析、选股等问题。</description>\n    <location>~/.openclaw\\workspace\\skills\\new-akshare-stock\\SKILL.md</location>\n  </skill>\n  <skill>\n    <name>self-improvement</name>\n    <description>Captures learnings, errors, and corrections to enable continuous improvement. Use when: (1) A command or operation fails unexpectedly, (2) User corrects Claude (&apos;No, that&apos;s wrong...&apos;, &apos;Actually...&apos;), (3) User requests a capability that doesn&apos;t exist, (4) An external API or tool fails, (5) Claude realizes its knowledge is outdated or incorrect, (6) A better approach is discovered for a recurring task. Also review learnings before major tasks.</description>\n    <location>~/.openclaw\\workspace\\skills\\self-improving-agent\\SKILL.md</location>\n  </skill>\n</available_skills>",
+      "skills": [
+        {
+          "name": "clawhub",
+          "requiredEnv": []
+        },
+        {
+          "name": "coding-agent",
+          "requiredEnv": []
+        },
+        {
+          "name": "gh-issues",
+          "primaryEnv": "GH_TOKEN",
+          "requiredEnv": []
+        },
+        {
+          "name": "github",
+          "requiredEnv": []
+        },
+        {
+          "name": "healthcheck"
+        },
+        {
+          "name": "skill-creator"
+        },
+        {
+          "name": "weather",
+          "requiredEnv": []
+        },
+        {
+          "name": "appinsights-instrumentation"
+        },
+        {
+          "name": "azure-ai"
+        },
+        {
+          "name": "azure-aigateway"
+        },
+        {
+          "name": "azure-cloud-migrate"
+        },
+        {
+          "name": "azure-compliance"
+        },
+        {
+          "name": "azure-compute"
+        },
+        {
+          "name": "azure-cost-optimization"
+        },
+        {
+          "name": "azure-deploy"
+        },
+        {
+          "name": "azure-diagnostics"
+        },
+        {
+          "name": "azure-hosted-copilot-sdk"
+        },
+        {
+          "name": "azure-kusto"
+        },
+        {
+          "name": "azure-messaging"
+        },
+        {
+          "name": "azure-observability"
+        },
+        {
+          "name": "azure-prepare"
+        },
+        {
+          "name": "azure-quotas"
+        },
+        {
+          "name": "azure-rbac"
+        },
+        {
+          "name": "azure-resource-lookup"
+        },
+        {
+          "name": "azure-resource-visualizer"
+        },
+        {
+          "name": "azure-storage"
+        },
+        {
+          "name": "azure-upgrade"
+        },
+        {
+          "name": "azure-validate"
+        },
+        {
+          "name": "entra-app-registration"
+        },
+        {
+          "name": "capacity"
+        },
+        {
+          "name": "customize"
+        },
+        {
+          "name": "preset"
+        },
+        {
+          "name": "deploy-model"
+        },
+        {
+          "name": "microsoft-foundry"
+        },
+        {
+          "name": "akshare-wrapper",
+          "requiredEnv": []
+        },
+        {
+          "name": "china-stock-analysis"
+        },
+        {
+          "name": "finance-official-research"
+        },
+        {
+          "name": "install-scientify"
+        },
+        {
+          "name": "stock-analysis"
+        },
+        {
+          "name": "akshare-stock"
+        },
+        {
+          "name": "self-improvement"
+        }
+      ],
+      "resolvedSkills": [
+        {
+          "name": "clawhub",
+          "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+          "filePath": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\clawhub\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\clawhub",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "coding-agent",
+          "description": "Delegate coding tasks to Codex, Claude Code, or Pi agents via background process. Use when: (1) building/creating new features or apps, (2) reviewing PRs (spawn in temp dir), (3) refactoring large codebases, (4) iterative coding that needs file exploration. NOT for: simple one-liner fixes (just edit), reading code (use read tool), thread-bound ACP harness requests in chat (for example spawn/run Codex or Claude Code in a Discord thread; use sessions_spawn with runtime:\"acp\"), or any work in ~/clawd workspace (never spawn agents here). Claude Code: use --print --permission-mode bypassPermissions (no PTY). Codex/Pi/OpenCode: pty:true required.",
+          "filePath": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\coding-agent\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\coding-agent",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gh-issues",
+          "description": "Fetch GitHub issues, spawn sub-agents to implement fixes and open PRs, then monitor and address PR review comments. Usage: /gh-issues [owner/repo] [--label bug] [--limit 5] [--milestone v1.0] [--assignee @me] [--fork user/repo] [--watch] [--interval 5] [--reviews-only] [--cron] [--dry-run] [--model glm-5] [--notify-channel -1002381931352]",
+          "filePath": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\gh-issues\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\gh-issues",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "github",
+          "description": "GitHub operations via `gh` CLI: issues, PRs, CI runs, code review, API queries. Use when: (1) checking PR status or CI, (2) creating/commenting on issues, (3) listing/filtering PRs or issues, (4) viewing run logs. NOT for: complex web UI interactions requiring manual browser flows (use browser tooling when available), bulk operations across many repos (script with gh api), or when gh auth is not configured.",
+          "filePath": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\github\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\github",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "healthcheck",
+          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
+          "filePath": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\healthcheck\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\healthcheck",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "skill-creator",
+          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+          "filePath": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\skill-creator\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\skill-creator",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "weather",
+          "description": "Get current weather and forecasts via wttr.in or Open-Meteo. Use when: user asks about weather, temperature, or forecasts for any location. NOT for: historical weather data, severe weather alerts, or detailed meteorological analysis. No API key needed.",
+          "filePath": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\weather\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\AppData\\Roaming\\npm\\node_modules\\openclaw\\skills\\weather",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "appinsights-instrumentation",
+          "description": "Guidance for instrumenting webapps with Azure Application Insights. Provides telemetry patterns, SDK setup, and configuration references. WHEN: how to instrument app, App Insights SDK, telemetry patterns, what is App Insights, Application Insights guidance, instrumentation examples, APM best practices.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\appinsights-instrumentation\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\appinsights-instrumentation",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-ai",
+          "description": "Use for Azure AI: Search, Speech, OpenAI, Document Intelligence. Helps with search, vector/hybrid search, speech-to-text, text-to-speech, transcription, OCR. WHEN: AI Search, query search, vector search, hybrid search, semantic search, speech-to-text, text-to-speech, transcribe, OCR, convert text to speech.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-ai\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-ai",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-aigateway",
+          "description": "Configure Azure API Management as an AI Gateway for AI models, MCP tools, and agents. WHEN: semantic caching, token limit, content safety, load balancing, AI model governance, MCP rate limiting, jailbreak detection, add Azure OpenAI backend, add AI Foundry model, test AI gateway, LLM policies, configure AI backend, token metrics, AI cost control, convert API to MCP, import OpenAPI to gateway.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-aigateway\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-aigateway",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-cloud-migrate",
+          "description": "Assess and migrate cross-cloud workloads to Azure. Generates assessment reports and converts code from AWS, GCP, or other providers to Azure services. WHEN: migrate Lambda to Azure Functions, migrate AWS to Azure, Lambda migration assessment, convert AWS serverless to Azure, migration readiness report, migrate from AWS, migrate from GCP, cross-cloud migration.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-cloud-migrate\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-cloud-migrate",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-compliance",
+          "description": "Comprehensive Azure compliance and security auditing capabilities including best practices assessment, Key Vault expiration monitoring, and resource configuration validation. WHEN: compliance scan, security audit, BEFORE running azqr (compliance cli tool), Azure best practices, Key Vault expiration check, compliance assessment, resource review, configuration validation, expired certificates, expiring secrets, orphaned resources, policy compliance, security posture evaluation.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-compliance\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-compliance",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-compute",
+          "description": "Recommend Azure VM sizes, VM Scale Sets (VMSS), and configurations based on workload requirements, performance needs, and budget constraints. No Azure account required — uses public documentation and the Azure Retail Prices API. WHEN: recommend VM size, which VM should I use, choose Azure VM, VM for web/database/ML/batch/HPC, GPU VM, compare VM sizes, cheapest VM, best VM for workload, VM pricing, cost estimate, burstable/compute/memory/storage optimized VM, confidential computing, VM trade-offs, VM families, VMSS, scale set recommendation, autoscale VMs, load balanced VMs, VMSS vs VM, scale out, horizontal scaling, flexible orchestration.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-compute\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-compute",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-cost-optimization",
+          "description": "Identify and quantify cost savings across Azure subscriptions by analyzing actual costs, utilization metrics, and generating actionable optimization recommendations. USE FOR: optimize Azure costs, reduce Azure spending, reduce Azure expenses, analyze Azure costs, find cost savings, generate cost optimization report, find orphaned resources, rightsize VMs, cost analysis, reduce waste, Azure spending analysis, find unused resources, optimize Redis costs. DO NOT USE FOR: deploying resources (use azure-deploy), general Azure diagnostics (use azure-diagnostics), security issues (use azure-security)",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-cost-optimization\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-cost-optimization",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-deploy",
+          "description": "Execute Azure deployments for ALREADY-PREPARED applications that have existing .azure/plan.md and infrastructure files. DO NOT use this skill when the user asks to CREATE a new application — use azure-prepare instead. This skill runs azd up, azd deploy, terraform apply, and az deployment commands with built-in error recovery. Requires .azure/plan.md from azure-prepare and validated status from azure-validate. WHEN: \"run azd up\", \"run azd deploy\", \"execute deployment\", \"push to production\", \"push to cloud\", \"go live\", \"ship it\", \"bicep deploy\", \"terraform apply\", \"publish to Azure\", \"launch on Azure\". DO NOT USE WHEN: \"create and deploy\", \"build and deploy\", \"create a new app\", \"set up infrastructure\", \"create and deploy to Azure using Terraform\" — use azure-prepare for these.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-deploy\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-deploy",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-diagnostics",
+          "description": "Debug and troubleshoot Azure Container Apps and Function Apps production issues using log analysis, health checks, and KQL. WHEN: debug production issues, troubleshoot containerized apps, troubleshoot Azure Functions, analyze logs with KQL, fix image pull failures, investigate health probe failures, troubleshoot cold starts, check resource health, find root cause of errors, function not working.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-diagnostics\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-diagnostics",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-hosted-copilot-sdk",
+          "description": "Build and deploy GitHub Copilot SDK apps to Azure. WHEN: build copilot app, create copilot app, copilot SDK, @github/copilot-sdk, scaffold copilot project, copilot-powered app, deploy copilot app, host on azure, azure model, BYOM, bring your own model, use my own model, azure openai model, DefaultAzureCredential, self-hosted model, copilot SDK service, chat app with copilot, copilot-sdk-service template, azd init copilot, CopilotClient, createSession, sendAndWait, GitHub Models API.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-hosted-copilot-sdk\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-hosted-copilot-sdk",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-kusto",
+          "description": "Query and analyze data in Azure Data Explorer (Kusto/ADX) using KQL for log analytics, telemetry, and time series analysis. WHEN: KQL queries, Kusto database queries, Azure Data Explorer, ADX clusters, log analytics, time series data, IoT telemetry, anomaly detection.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-kusto\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-kusto",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-messaging",
+          "description": "Troubleshoot and resolve issues with Azure Messaging SDKs for Event Hubs and Service Bus. Covers connection failures, authentication errors, message processing issues, and SDK configuration problems. WHEN: event hub SDK error, service bus SDK issue, messaging connection failure, AMQP error, event processor host issue, message lock lost, send timeout, receiver disconnected, SDK troubleshooting, azure messaging SDK, event hub consumer, service bus queue issue, topic subscription error, enable logging event hub, service bus logging, eventhub python, servicebus java, eventhub javascript, servicebus dotnet, event hub checkpoint, event hub not receiving messages, service bus dead letter.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-messaging\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-messaging",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-observability",
+          "description": "Azure Observability Services including Azure Monitor, Application Insights, Log Analytics, Alerts, and Workbooks. Provides metrics, APM, distributed tracing, KQL queries, and interactive reports. USE FOR: Azure Monitor, Application Insights, Log Analytics, Alerts, Workbooks, metrics, APM, distributed tracing, KQL queries, interactive reports, observability, monitoring dashboards. DO NOT USE FOR: instrumenting apps with App Insights SDK (use appinsights-instrumentation), querying Kusto/ADX clusters (use azure-kusto), cost analysis (use azure-cost-optimization).",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-observability\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-observability",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-prepare",
+          "description": "Prepare Azure apps for deployment (infra Bicep/Terraform, azure.yaml, Dockerfiles). Use for create/modernize or create+deploy; not cross-cloud migration (use azure-cloud-migrate). WHEN: \"create app\", \"build web app\", \"create API\", \"create serverless HTTP API\", \"create frontend\", \"create back end\", \"build a service\", \"modernize application\", \"update application\", \"add authentication\", \"add caching\", \"host on Azure\", \"create and deploy\", \"deploy to Azure\", \"deploy to Azure using Terraform\", \"deploy to Azure App Service\", \"deploy to Azure App Service using Terraform\", \"deploy to Azure Container Apps\", \"deploy to Azure Container Apps using Terraform\", \"generate Terraform\", \"generate Bicep\", \"function app\", \"timer trigger\", \"service bus trigger\", \"event-driven function\", \"containerized Node.js app\", \"social media app\", \"static portfolio website\", \"todo list with frontend and API\", \"prepare my Azure application to use Key Vault\", \"managed identity\".",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-prepare\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-prepare",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-quotas",
+          "description": "Check/manage Azure quotas and usage across providers. For deployment planning, capacity validation, region selection. WHEN: \"check quotas\", \"service limits\", \"current usage\", \"request quota increase\", \"quota exceeded\", \"validate capacity\", \"regional availability\", \"provisioning limits\", \"vCPU limit\", \"how many vCPUs available in my subscription\".",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-quotas\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-quotas",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-rbac",
+          "description": "Helps users find the right Azure RBAC role for an identity with least privilege access, then generate CLI commands and Bicep code to assign it. Also provides guidance on permissions required to grant roles. WHEN: what role should I assign, least privilege role, RBAC role for, role to read blobs, role for managed identity, custom role definition, assign role to identity, what role do I need to grant access, permissions to assign roles.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-rbac\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-rbac",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-resource-lookup",
+          "description": "List, find, and show Azure resources. Answers \"list my VMs\", \"show my storage accounts\", \"list websites\", \"find container apps\", \"what resources do I have\", and similar queries for any Azure resource type. USE FOR: list resources, list virtual machines, list VMs, list storage accounts, list websites, list web apps, list container apps, show resources, find resources, what resources do I have, list resources in resource group, list resources in subscription, find resources by tag, find orphaned resources, resource inventory, count resources by type, cross-subscription resource query, Azure Resource Graph, resource discovery, list container registries, list SQL servers, list Key Vaults, show resource groups, list app services, find resources across subscriptions, find unattached disks, tag analysis. DO NOT USE FOR: deploying resources (use azure-deploy), creating or modifying resources, cost optimization (use azure-cost-optimization), writing application code, non-Azure clouds.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-resource-lookup\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-resource-lookup",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-resource-visualizer",
+          "description": "Analyze Azure resource groups and generate detailed Mermaid architecture diagrams showing the relationships between individual resources. USE FOR: create architecture diagram, visualize Azure resources, show resource relationships, generate Mermaid diagram, analyze resource group, diagram my resources, architecture visualization, resource topology, map Azure infrastructure DO NOT USE FOR: creating/modifying resources (use azure-deploy), security scanning (use azure-security), performance troubleshooting (use azure-diagnostics), code generation (use relevant service skill)",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-resource-visualizer\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-resource-visualizer",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-storage",
+          "description": "Azure Storage Services including Blob Storage, File Shares, Queue Storage, Table Storage, and Data Lake. Provides object storage, SMB file shares, async messaging, NoSQL key-value, and big data analytics capabilities. Includes access tiers (hot, cool, archive) and lifecycle management. USE FOR: blob storage, file shares, queue storage, table storage, data lake, upload files, download blobs, storage accounts, access tiers, lifecycle management. DO NOT USE FOR: SQL databases, Cosmos DB (use azure-prepare), messaging with Event Hubs or Service Bus (use azure-messaging).",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-storage\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-storage",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-upgrade",
+          "description": "Assess and upgrade Azure workloads between plans, tiers, or SKUs within Azure. Generates assessment reports and automates upgrade steps. WHEN: upgrade Consumption to Flex Consumption, upgrade Azure Functions plan, migrate hosting plan, upgrade Functions SKU, move to Flex Consumption, upgrade Azure service tier, change hosting plan, upgrade function app plan, migrate App Service to Container Apps.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-upgrade\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-upgrade",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "azure-validate",
+          "description": "Pre-deployment validation for Azure readiness. Run deep checks on configuration, infrastructure (Bicep or Terraform), permissions, and prerequisites before deploying. WHEN: validate my app, check deployment readiness, run preflight checks, verify configuration, check if ready to deploy, validate azure.yaml, validate Bicep, test before deploying, troubleshoot deployment errors, validate Azure Functions, validate function app, validate serverless deployment.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-validate\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\azure-validate",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "entra-app-registration",
+          "description": "Guides Microsoft Entra ID app registration, OAuth 2.0 authentication, and MSAL integration. USE FOR: create app registration, register Azure AD app, configure OAuth, set up authentication, add API permissions, generate service principal, MSAL example, console app auth, Entra ID setup, Azure AD authentication. DO NOT USE FOR: Azure RBAC or role assignments (use azure-rbac), Key Vault secrets (use azure-keyvault-expiration-audit), Azure resource security (use azure-security).",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\entra-app-registration\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\entra-app-registration",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "capacity",
+          "description": "Discovers available Azure OpenAI model capacity across regions and projects. Analyzes quota limits, compares availability, and recommends optimal deployment locations based on capacity requirements. USE FOR: find capacity, check quota, where can I deploy, capacity discovery, best region for capacity, multi-project capacity search, quota analysis, model availability, region comparison, check TPM availability. DO NOT USE FOR: actual deployment (hand off to preset or customize after discovery), quota increase requests (direct user to Azure Portal), listing existing deployments.",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\models\\deploy-model\\capacity\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\models\\deploy-model\\capacity",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "customize",
+          "description": "Interactive guided deployment flow for Azure OpenAI models with full customization control. Step-by-step selection of model version, SKU (GlobalStandard/Standard/ProvisionedManaged), capacity, RAI policy (content filter), and advanced options (dynamic quota, priority processing, spillover). USE FOR: custom deployment, customize model deployment, choose version, select SKU, set capacity, configure content filter, RAI policy, deployment options, detailed deployment, advanced deployment, PTU deployment, provisioned throughput. DO NOT USE FOR: quick deployment to optimal region (use preset).",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\models\\deploy-model\\customize\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\models\\deploy-model\\customize",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "preset",
+          "description": "Intelligently deploys Azure OpenAI models to optimal regions by analyzing capacity across all available regions. Automatically checks current region first and shows alternatives if needed. USE FOR: quick deployment, optimal region, best region, automatic region selection, fast setup, multi-region capacity check, high availability deployment, deploy to best location. DO NOT USE FOR: custom SKU selection (use customize), specific version selection (use customize), custom capacity configuration (use customize), PTU deployments (use customize).",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\models\\deploy-model\\preset\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\models\\deploy-model\\preset",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deploy-model",
+          "description": "Unified Azure OpenAI model deployment skill with intelligent intent-based routing. Handles quick preset deployments, fully customized deployments (version/SKU/capacity/RAI policy), and capacity discovery across regions and projects. USE FOR: deploy model, deploy gpt, create deployment, model deployment, deploy openai model, set up model, provision model, find capacity, check model availability, where can I deploy, best region for model, capacity analysis. DO NOT USE FOR: listing existing deployments (use foundry_models_deployments_list MCP tool), deleting deployments, agent creation (use agent/create), project creation (use project/create).",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\models\\deploy-model\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\models\\deploy-model",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "microsoft-foundry",
+          "description": "Deploy, evaluate, and manage Foundry agents end-to-end: Docker build, ACR push, hosted/prompt agent create, container start, batch eval, prompt optimization, prompt optimizer workflows, agent.yaml, dataset curation from traces. USE FOR: deploy agent to Foundry, hosted agent, create agent, invoke agent, evaluate agent, run batch eval, optimize prompt, improve prompt, prompt optimization, prompt optimizer, improve agent instructions, optimize agent instructions, optimize system prompt, deploy model, Foundry project, RBAC, role assignment, permissions, quota, capacity, region, troubleshoot agent, deployment failure, create dataset from traces, dataset versioning, eval trending, create AI Services, Cognitive Services, create Foundry resource, provision resource, knowledge index, agent monitoring, customize deployment, onboard, availability. DO NOT USE FOR: Azure Functions, App Service, general Azure deploy (use azure-deploy), general Azure prep (use azure-prepare).",
+          "filePath": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.agents\\skills\\microsoft-foundry",
+          "source": "agents-skills-personal",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "akshare-wrapper",
+          "description": "A股分析技能包装器，基于akshare数据源。支持实时行情、个股分析、板块轮动、资金流向等A股分析功能。使用自然语言查询A股市场数据。",
+          "filePath": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\akshare-wrapper\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\akshare-wrapper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "china-stock-analysis",
+          "description": "Analyze Chinese stock prices (A-shares, HK stocks) and provide investment recommendations. Use when the user asks about stock analysis for Chinese companies, including buying/selling recommendations and market trends.",
+          "filePath": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\china-stock-analysis\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\china-stock-analysis",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "finance-official-research",
+          "description": "Analyze stocks, ETFs, mutual funds, listed companies, financial statements, disclosures, index constituents, and investment questions using official or primary-source data only. Use when the user asks for stock analysis, fund analysis, company fundamentals, valuation inputs, portfolio holdings, earnings interpretation, exchange filings, prospectus/report review, or investment due diligence and requires authoritative, citation-backed answers verified against official disclosure sites before answering.",
+          "filePath": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\finance-official-research\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\finance-official-research",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "install-scientify",
+          "description": "Use this when the user wants to install or set up the Scientify research plugin. Adds research-pipeline, literature-survey, idea-generation, arxiv tools, and workspace management.",
+          "filePath": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\install-scientify\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\install-scientify",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "stock-analysis",
+          "description": "Analyze stocks and cryptocurrencies using Yahoo Finance data. Supports portfolio management, watchlists with alerts, dividend analysis, 8-dimension stock scoring, viral trend detection (Hot Scanner), and rumor/early signal detection. Use for stock analysis, portfolio tracking, earnings reactions, crypto monitoring, trending stocks, or finding rumors before they hit mainstream.",
+          "filePath": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\stock-analysis\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\stock-analysis",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "akshare-stock",
+          "description": "A股量化数据分析工具，基于AkShare库获取A股行情、财务数据、板块信息等。用于回答关于A股股票查询、行情数据、财务分析、选股等问题。",
+          "filePath": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\new-akshare-stock\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\new-akshare-stock",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "self-improvement",
+          "description": "Captures learnings, errors, and corrections to enable continuous improvement. Use when: (1) A command or operation fails unexpectedly, (2) User corrects Claude ('No, that's wrong...', 'Actually...'), (3) User requests a capability that doesn't exist, (4) An external API or tool fails, (5) Claude realizes its knowledge is outdated or incorrect, (6) A better approach is discovered for a recurring task. Also review learnings before major tasks.",
+          "filePath": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\self-improving-agent\\SKILL.md",
+          "baseDir": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\skills\\self-improving-agent",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        }
+      ],
+      "version": 0
+    },
+    "authProfileOverride": "azure-openai-responses:default",
+    "authProfileOverrideSource": "auto",
+    "authProfileOverrideCompactionCount": 0,
+    "modelProvider": "azure-openai-responses",
+    "model": "gpt-5.1-codex-mini",
+    "contextTokens": 272000,
+    "systemPromptReport": {
+      "source": "run",
+      "generatedAt": 1773910548695,
+      "sessionId": "d6963fec-5fe4-4733-a6ba-80709c57b841",
+      "sessionKey": "agent:main:main",
+      "provider": "azure-openai-responses",
+      "model": "gpt-5.1-codex-mini",
+      "workspaceDir": "C:\\Users\\yanmeizhao\\.openclaw\\workspace",
+      "bootstrapMaxChars": 20000,
+      "bootstrapTotalMaxChars": 150000,
+      "bootstrapTruncation": {
+        "warningMode": "once",
+        "warningShown": false,
+        "truncatedFiles": 0,
+        "nearLimitFiles": 0,
+        "totalNearLimit": false
+      },
+      "sandbox": {
+        "mode": "off",
+        "sandboxed": false
+      },
+      "systemPrompt": {
+        "chars": 50263,
+        "projectContextChars": 14185,
+        "nonProjectContextChars": 36078
+      },
+      "injectedWorkspaceFiles": [
+        {
+          "name": "AGENTS.md",
+          "path": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\AGENTS.md",
+          "missing": false,
+          "rawChars": 7809,
+          "injectedChars": 7809,
+          "truncated": false
+        },
+        {
+          "name": "SOUL.md",
+          "path": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\SOUL.md",
+          "missing": false,
+          "rawChars": 1664,
+          "injectedChars": 1664,
+          "truncated": false
+        },
+        {
+          "name": "TOOLS.md",
+          "path": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\TOOLS.md",
+          "missing": false,
+          "rawChars": 1385,
+          "injectedChars": 1385,
+          "truncated": false
+        },
+        {
+          "name": "IDENTITY.md",
+          "path": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\IDENTITY.md",
+          "missing": false,
+          "rawChars": 633,
+          "injectedChars": 633,
+          "truncated": false
+        },
+        {
+          "name": "USER.md",
+          "path": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\USER.md",
+          "missing": false,
+          "rawChars": 474,
+          "injectedChars": 474,
+          "truncated": false
+        },
+        {
+          "name": "HEARTBEAT.md",
+          "path": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\HEARTBEAT.md",
+          "missing": false,
+          "rawChars": 167,
+          "injectedChars": 167,
+          "truncated": false
+        },
+        {
+          "name": "BOOTSTRAP.md",
+          "path": "C:\\Users\\yanmeizhao\\.openclaw\\workspace\\BOOTSTRAP.md",
+          "missing": false,
+          "rawChars": 1449,
+          "injectedChars": 1449,
+          "truncated": false
+        }
+      ],
+      "skills": {
+        "promptChars": 26808,
+        "entries": [
+          {
+            "name": "clawhub",
+            "blockChars": 436
+          },
+          {
+            "name": "coding-agent",
+            "blockChars": 836
+          },
+          {
+            "name": "gh-issues",
+            "blockChars": 512
+          },
+          {
+            "name": "github",
+            "blockChars": 576
+          },
+          {
+            "name": "healthcheck",
+            "blockChars": 495
+          },
+          {
+            "name": "skill-creator",
+            "blockChars": 300
+          },
+          {
+            "name": "weather",
+            "blockChars": 420
+          },
+          {
+            "name": "appinsights-instrumentation",
+            "blockChars": 477
+          },
+          {
+            "name": "azure-ai",
+            "blockChars": 444
+          },
+          {
+            "name": "azure-aigateway",
+            "blockChars": 545
+          },
+          {
+            "name": "azure-cloud-migrate",
+            "blockChars": 520
+          },
+          {
+            "name": "azure-compliance",
+            "blockChars": 632
+          },
+          {
+            "name": "azure-compute",
+            "blockChars": 793
+          },
+          {
+            "name": "azure-cost-optimization",
+            "blockChars": 766
+          },
+          {
+            "name": "azure-deploy",
+            "blockChars": 1090
+          },
+          {
+            "name": "azure-diagnostics",
+            "blockChars": 552
+          },
+          {
+            "name": "azure-hosted-copilot-sdk",
+            "blockChars": 655
+          },
+          {
+            "name": "azure-kusto",
+            "blockChars": 410
+          },
+          {
+            "name": "azure-messaging",
+            "blockChars": 840
+          },
+          {
+            "name": "azure-observability",
+            "blockChars": 724
+          },
+          {
+            "name": "azure-prepare",
+            "blockChars": 1413
+          },
+          {
+            "name": "azure-quotas",
+            "blockChars": 592
+          },
+          {
+            "name": "azure-rbac",
+            "blockChars": 578
+          },
+          {
+            "name": "azure-resource-lookup",
+            "blockChars": 1202
+          },
+          {
+            "name": "azure-resource-visualizer",
+            "blockChars": 748
+          },
+          {
+            "name": "azure-storage",
+            "blockChars": 719
+          },
+          {
+            "name": "azure-upgrade",
+            "blockChars": 545
+          },
+          {
+            "name": "azure-validate",
+            "blockChars": 608
+          },
+          {
+            "name": "entra-app-registration",
+            "blockChars": 642
+          },
+          {
+            "name": "capacity",
+            "blockChars": 755
+          },
+          {
+            "name": "customize",
+            "blockChars": 770
+          },
+          {
+            "name": "preset",
+            "blockChars": 716
+          },
+          {
+            "name": "deploy-model",
+            "blockChars": 817
+          },
+          {
+            "name": "microsoft-foundry",
+            "blockChars": 1129
+          },
+          {
+            "name": "akshare-wrapper",
+            "blockChars": 229
+          },
+          {
+            "name": "china-stock-analysis",
+            "blockChars": 389
+          },
+          {
+            "name": "finance-official-research",
+            "blockChars": 687
+          },
+          {
+            "name": "install-scientify",
+            "blockChars": 345
+          },
+          {
+            "name": "stock-analysis",
+            "blockChars": 539
+          },
+          {
+            "name": "akshare-stock",
+            "blockChars": 230
+          },
+          {
+            "name": "self-improvement",
+            "blockChars": 643
+          }
+        ]
+      },
+      "tools": {
+        "listChars": 1705,
+        "schemaChars": 6148,
+        "entries": [
+          {
+            "name": "read",
+            "summaryChars": 298,
+            "schemaChars": 392,
+            "propertiesCount": 4
+          },
+          {
+            "name": "edit",
+            "summaryChars": 129,
+            "schemaChars": 591,
+            "propertiesCount": 6
+          },
+          {
+            "name": "write",
+            "summaryChars": 127,
+            "schemaChars": 313,
+            "propertiesCount": 3
+          },
+          {
+            "name": "exec",
+            "summaryChars": 181,
+            "schemaChars": 1086,
+            "propertiesCount": 12
+          },
+          {
+            "name": "process",
+            "summaryChars": 85,
+            "schemaChars": 961,
+            "propertiesCount": 12
+          },
+          {
+            "name": "cron",
+            "summaryChars": 2689,
+            "schemaChars": 690,
+            "propertiesCount": 13
+          },
+          {
+            "name": "sessions_list",
+            "summaryChars": 54,
+            "schemaChars": 212,
+            "propertiesCount": 4
+          },
+          {
+            "name": "sessions_history",
+            "summaryChars": 36,
+            "schemaChars": 161,
+            "propertiesCount": 3
+          },
+          {
+            "name": "sessions_send",
+            "summaryChars": 84,
+            "schemaChars": 273,
+            "propertiesCount": 5
+          },
+          {
+            "name": "sessions_spawn",
+            "summaryChars": 198,
+            "schemaChars": 922,
+            "propertiesCount": 16
+          },
+          {
+            "name": "subagents",
+            "summaryChars": 105,
+            "schemaChars": 191,
+            "propertiesCount": 4
+          },
+          {
+            "name": "session_status",
+            "summaryChars": 207,
+            "schemaChars": 89,
+            "propertiesCount": 2
+          },
+          {
+            "name": "memory_search",
+            "summaryChars": 334,
+            "schemaChars": 139,
+            "propertiesCount": 3
+          },
+          {
+            "name": "memory_get",
+            "summaryChars": 151,
+            "schemaChars": 128,
+            "propertiesCount": 3
+          }
+        ]
+      }
+    },
+    "inputTokens": 7407,
+    "outputTokens": 2154,
+    "cacheRead": 31616,
+    "cacheWrite": 0,
+    "totalTokens": 33723,
+    "totalTokensFresh": true
+  }
+}

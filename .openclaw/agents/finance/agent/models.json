@@ -1,0 +1,44 @@
+{
+  "providers": {
+    "azure-openai-responses": {
+      "baseUrl": "https://ym-claude-opus-dev-0316-resource.cognitiveservices.azure.com/openai",
+      "api": "azure-openai-responses",
+      "apiVersion": "2025-04-01-preview",
+      "models": [
+        {
+          "id": "gpt-5.1-codex-mini",
+          "name": "gpt-5.1-codex-mini",
+          "reasoning": true,
+          "input": [
+            "text"
+          ],
+          "contextWindow": 200000,
+          "maxTokens": 16384
+        }
+      ]
+    },
+    "ollama": {
+      "baseUrl": "http://127.0.0.1:11434",
+      "api": "ollama",
+      "models": [
+        {
+          "id": "all-minilm:latest",
+          "name": "all-minilm:latest",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 512,
+          "maxTokens": 8192
+        }
+      ],
+      "apiKey": "ollama-local"
+    }
+  }
+}

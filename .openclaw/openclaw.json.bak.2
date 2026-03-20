@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.7",
+    "lastTouchedAt": "2026-03-18T05:15:39.902Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-18T03:51:44.046Z",
+    "lastRunVersion": "2026.3.7",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "openai-codex:default": {
+        "provider": "openai-codex",
+        "mode": "oauth"
+      },
+      "azure-openai-responses:default": {
+        "provider": "azure-openai-responses",
+        "mode": "token"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "azure-openai-responses/gpt-5.1-codex-mini"
+      },
+      "models": {
+        "azure-openai-responses/gpt-5.1-codex-mini": {
+          "baseUrl": "https://ym-claude-opus-dev-0316-resource.cognitiveservices.azure.com/openai"
+        }
+      },
+      "workspace": "C:\\Users\\yanmeizhao\\.openclaw\\workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    }
+  },
+  "tools": {
+    "profile": "coding",
+    "web": {
+      "search": {
+        "provider": "perplexity"
+      }
+    }
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "pairing",
+      "botToken": "no",
+      "groupPolicy": "allowlist",
+      "streaming": "partial"
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "dccb8f41c7d2d0233dfc9755532834f922488e7c496b0afc"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "calendar.add",
+        "reminders.add",
+        "sms.send"
+      ]
+    }
+  },
+  "skills": {
+    "entries": {
+      "goplaces": {
+        "apiKey": "ei"
+      },
+      "nano-banana-pro": {
+        "apiKey": "AIzaSyDqK2NGd9FiwY5Ixq-xzL2sJsZhRyPW4CI"
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "telegram": {
+        "enabled": true
+      }
+    }
+  }
+}

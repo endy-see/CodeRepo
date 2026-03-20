@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "profiles": {
+    "openai-codex:default": {
+      "type": "oauth",
+      "provider": "openai-codex",
+      "access": "<YOUR_OPENAI_ACCESS_TOKEN>",
+      "refresh": "<YOUR_OPENAI_REFRESH_TOKEN>",
+      "expires": 0,
+      "accountId": "<YOUR_OPENAI_ACCOUNT_ID>"
+    },
+    "azure-openai-responses:default": {
+      "type": "token",
+      "provider": "azure-openai-responses",
+      "token": "<YOUR_AZURE_OPENAI_API_KEY>"
+    }
+  },
+  "usageStats": {
+    "openai-codex:default": {
+      "errorCount": 0,
+      "lastUsed": 1773035135004
+    },
+    "azure-openai-responses:default": {
+      "errorCount": 0,
+      "lastUsed": 1773910120615
+    }
+  }
+}
